@@ -1,27 +1,67 @@
-div.AppMenu {
-    text-align: left;
+div.Filter-Container {
+    text-align: right;
     cursor: default;
     transition: background-color 0.25s;
     outline: none;
     overflow: hidden;
-    display: flex;
+    margin-left: 5rem;
+    /* display: flex; */
+        flex: 1 1 auto;
+        display: inline-flex;  
     align-items: center;
     height: 100%;
 }
 
-div.AppMenu.appmenu-visible {
+
+form{
+    display: flex;
+}
+
+.ant-form{
+    padding-top: 1.5rem;
+}
+
+.ant-form .ant-form-item{
+    padding: 0px 6px;
+}
+
+.ant-form .ant-form-item .ant-row .ant-col label{
+    font-style: normal;
+    font-weight: 600;
+}
+
+.ant-form .ant-form-item .ant-row .ant-col .ant-form-item-control-input  .ant-form-item-control-input-content .ant-input-group .ant-input{
+    border-radius: 0px 6px 6px 0px !important;
+    height: 2.3em;
+    text-align: left;
+}
+
+.ant-form .ant-form-item .ant-row .ant-col .ant-form-item-control-input .ant-form-item-control-input-content .ant-btn{
+    color: rgb(35 42 56 / 1);
+    font-weight: 500;
+    background-color: rgb(222 161 9 / 1);
+    align-items: center;
+}
+
+.ant-form .ant-form-item .ant-row .ant-col .ant-form-item-control-input .ant-form-item-control-input-content .ant-select .ant-select-selector{
+    width: 120px;
+    text-align: left;
+}
+/* .ant-form-horizontal
+ */
+div.Filter-Container.appmenu-visible {
     background-color: var(--app-submenu-bg-color-hover);
     color: var(--app-submenu-text-color-hover);
     overflow: visible;
 }
 
 
-div.AppMenu .appmenu-label {
+div.Filter-Container .appmenu-label {
     font-weight: bold;
     transition: color 0.25s;
 }
 
-div.AppMenu .appmenu-icon {
+div.Filter-Container .appmenu-icon {
     color: var(--app-menu-text-color);
     padding: 0.25em;
     margin: 0 1em;
@@ -29,17 +69,17 @@ div.AppMenu .appmenu-icon {
     transition: color 0.25s, border-color 0.25s, background-color 0.25s;
 }
 
-div.AppMenu.appmenu-visible .appmenu-icon {
+div.Filter-Container.appmenu-visible .appmenu-icon {
     color: var(--app-submenu-text-color-hover);
     border-color: var(--app-submenu-text-color-hover);
     background-color: inherit;
 }
 
-div.AppMenu.appmenu-blocked {
+div.Filter-Container.appmenu-blocked {
     cursor: not-allowed;
 }
 
-div.AppMenu div.appmenu-menu-container {
+div.Filter-Container div.appmenu-menu-container {
     position: absolute;
     top: 100%;
     left: 0;
@@ -56,7 +96,7 @@ div.AppMenu div.appmenu-menu-container {
     max-height: calc(var(--vh, 1vh) * 100 - var(--topbar-height) - var(--bottombar-height));
 }
 
-div.AppMenu.appmenu-compact div.appmenu-menu-container {
+div.Filter-Container.appmenu-compact div.appmenu-menu-container {
     right: -11.25em;
     width: 15em;
     height: calc(100vh - 5.5em);
@@ -66,22 +106,22 @@ div.AppMenu.appmenu-compact div.appmenu-menu-container {
     top: 3.5em;
 }
 
-div.AppMenu.appmenu-compact div.appmenu-menu-container:hover {
+div.Filter-Container.appmenu-compact div.appmenu-menu-container:hover {
     right: 0;
 }
 
-div.AppMenu ul.appmenu-menu {
+div.Filter-Container ul.appmenu-menu {
     text-align: left;
     padding: 0;
     background-color: var(--app-menu-bg-color);
 }
 
-div.AppMenu.appmenu-visible div.appmenu-menu-container {
+div.Filter-Container.appmenu-visible div.appmenu-menu-container {
     transform: scaleY(1);
     opacity: 1;
 }
 
-div.AppMenu ul.appmenu-menu li {
+div.Filter-Container ul.appmenu-menu li {
     color: var(--app-menu-text-color);
     list-style-type: none;
     margin: 0;
@@ -89,18 +129,18 @@ div.AppMenu ul.appmenu-menu li {
     font-weight: bold;
 }
 
-div.AppMenu ul.appmenu-menu li:not(:last-child) {
+div.Filter-Container ul.appmenu-menu li:not(:last-child) {
     border-bottom: 1px solid var(--app-menu-text-color);
 }
 
-div.AppMenu ul.appmenu-menu > li.appmenu-leaf-active,
-div.AppMenu ul.appmenu-menu > li.appmenu-submenu-active,
-div.AppMenu ul.appmenu-menu > li.appmenu-submenu-expanded {
+div.Filter-Container ul.appmenu-menu > li.appmenu-leaf-active,
+div.Filter-Container ul.appmenu-menu > li.appmenu-submenu-active,
+div.Filter-Container ul.appmenu-menu > li.appmenu-submenu-expanded {
     background-color: var(--app-menu-bg-color-hover);
     color: var(--app-menu-text-color-hover);
 }
 
-div.AppMenu ul.appmenu-menu li > .icon {
+div.Filter-Container ul.appmenu-menu li > .icon {
     vertical-align: middle;
     width: 2em;
     margin: 0.5em 1em 0.5em 1em;

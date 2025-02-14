@@ -120,6 +120,7 @@ export function finishThemeSetup(dispatch, theme, themes, layerConfigs, insertPo
 }
 
 export function setCurrentTheme(theme, themes, preserve = true, initialView = null, layerParams = null, visibleBgLayer = null, permalinkLayers = null, themeLayerRestorer = null, externalLayerRestorer = null) {
+    console.log(theme, themes)
     return (dispatch, getState) => {
         const mapCrs = theme.mapCrs || themes.defaultMapCrs || "EPSG:3857";
         if (!(mapCrs in CoordinatesUtils.getAvailableCRS())) {
@@ -133,6 +134,7 @@ export function setCurrentTheme(theme, themes, preserve = true, initialView = nu
         });
 
         // Get current background layer if it needs to be preserved
+        console.log("Get current background layer if it needs to be preserved")
         if (preserve && visibleBgLayer === null && ConfigUtils.getConfigProp("preserveBackgroundOnThemeSwitch", theme) === true) {
             const curBgLayer = getState().layers.flat.find(layer => layer.role === LayerRole.BACKGROUND && layer.visibility === true);
             visibleBgLayer = curBgLayer ? curBgLayer.name : null;
@@ -187,9 +189,9 @@ export function setCurrentTheme(theme, themes, preserve = true, initialView = nu
                 initialView = {bounds: getState().map.bbox.bounds, crs: getState().map.projection};
             }
         }
-
+        console.log("thme.js", theme)
         // Reconfigure map
-        dispatch(configureMap(theme.mapCrs, theme.scales, initialView || theme.initialBbox));
+        dispatch(configureMap(theme.mapCrs, theme.scales, initialView || theme.initialBbox, theme.capabilities));
 
         let layerConfigs = layerParams ? layerParams.map(param => LayerUtils.splitLayerUrlParam(param)) : null;
         if (layerConfigs) {
@@ -224,12 +226,14 @@ export function setCurrentTheme(theme, themes, preserve = true, initialView = nu
                         dispatch(showNotification("missinglayers", LocaleUtils.tr("app.missinglayers", diff.join(", ")), NotificationType.WARN, true));
                     }
                 }
+                console.log("if: ", dispatch, newTheme, themes, layerConfigs, insertPos, permalinkLayers, externalLayerRestorer, visibleBgLayer, initialTheme);
                 finishThemeSetup(dispatch, newTheme, themes, layerConfigs, insertPos, permalinkLayers, externalLayerRestorer, visibleBgLayer, initialTheme);
             });
         } else {
             if (!isEmpty(missingThemeLayers)) {
                 dispatch(showNotification("missinglayers", LocaleUtils.tr("app.missinglayers", Object.keys(missingThemeLayers).join(", ")), NotificationType.WARN, true));
             }
+            console.log("else: ", dispatch, theme, themes, layerConfigs, insertPos, permalinkLayers, externalLayerRestorer, visibleBgLayer, initialTheme);
             finishThemeSetup(dispatch, theme, themes, layerConfigs, insertPos, permalinkLayers, externalLayerRestorer, visibleBgLayer, initialTheme);
         }
     };
@@ -238,6 +242,7 @@ export function setCurrentTheme(theme, themes, preserve = true, initialView = nu
 export function restoreDefaultTheme() {
     return (dispatch, getState) => {
         const themes = getState().theme.themes;
+        console.log("theme ID",themes.defaultTheme)
         dispatch(setCurrentTheme(ThemeUtils.getThemeById(themes, themes.defaultTheme), themes, false));
     };
 }

@@ -74,7 +74,11 @@ class HeightProfilePrintDialog_ extends React.PureComponent {
         imageUrl: ''
     };
     componentDidMount() {
-        const templatePath = MiscUtils.resolveAssetsPath(this.props.templatePath);
+        let templatePath = this.props.templatePath;
+        if (templatePath.startsWith(":/")) {
+            const assetsPath = ConfigUtils.getAssetsPath();
+            templatePath = assetsPath + templatePath.substr(1);
+        }
         this.externalWindow = window.open(templatePath, LocaleUtils.tr("heightprofile.title"), "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes");
         this.externalWindow.addEventListener('load', this.setWindowContent, false);
         this.externalWindow.addEventListener('resize', this.windowResized, false);
@@ -399,7 +403,7 @@ class HeightProfile extends React.Component {
                     displayColors: false,
                     bodyFont: {weight: 'bold'},
                     callbacks: {
-                        title: (ctx) => (distanceStr + ": " + MeasureUtils.formatMeasurement(ctx[0].parsed.x, false, 'metric')),
+                        title: (ctx) => (distanceStr + ": " + MeasureUtils.formatMeasurement(ctx[0].parsed.x, false, 'metric', 2)),
                         label: (ctx) => (heightStr + ": " + ctx.parsed.y.toFixed(prec) + " m " + aslStr)
                     }
                 }

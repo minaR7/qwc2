@@ -10,7 +10,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import classnames from 'classnames';
-import isEmpty from 'lodash.isempty';
 import PropTypes from 'prop-types';
 
 import Icon from '../Icon';
@@ -46,7 +45,7 @@ class ButtonBar extends React.Component {
         return (
             <div className={"ButtonBar" + (this.props.disabled ? " buttonbar-disabled" : "")}>
                 {this.props.buttons.map((entry, idx) => {
-                    if (Array.isArray(entry) && entry.length > 1) {
+                    if (Array.isArray(entry)) {
                         const active = entry.find(e => e.key === this.props.active) !== undefined ? this.props.active : null;
                         return (
                             <MenuButton active={active} className="buttonbar-combo" key={"combo" + idx} onActivate={(value) => this.props.onClick(value, entry.find(e => e.key === value).data)}>
@@ -65,10 +64,7 @@ class ButtonBar extends React.Component {
                                 ))}
                             </MenuButton>
                         );
-                    } else if (!isEmpty(entry)) {
-                        if (Array.isArray(entry)) {
-                            entry = entry[0];
-                        }
+                    } else {
                         let classes = classnames({
                             button: true,
                             pressed: this.props.active === entry.key || entry.pressed
@@ -91,8 +87,6 @@ class ButtonBar extends React.Component {
                                 ) : null}
                             </span>
                         );
-                    } else {
-                        return null;
                     }
                 })}
             </div>

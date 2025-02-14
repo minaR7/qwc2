@@ -44,16 +44,19 @@ export function changeMapView(center, zoom, bbox, size, mapStateSource, projecti
  *             or
  *               {bounds: [xmin, ymin, xmax, ymax], crs: ...}
  */
-export function configureMap(crs, scales, view) {
+export function configureMap(crs, scales, view, capabilities) {
+    console.log(crs, scales, view, CONFIGURE_MAP)
     return {
         type: CONFIGURE_MAP,
         crs,
         scales,
-        view
+        view,
+        capabilities
     };
 }
 
 export function clickOnMap(clickData) {
+    console.log(clickData)
     return {
         type: CLICK_ON_MAP,
         click: clickData

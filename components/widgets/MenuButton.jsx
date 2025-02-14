@@ -17,12 +17,7 @@ export default class MenuButton extends React.Component {
         menuClassName: PropTypes.string,
         menuIcon: PropTypes.string,
         menuLabel: PropTypes.string,
-        onActivate: PropTypes.func,
-        tooltip: PropTypes.string,
-        tooltipPos: PropTypes.string
-    };
-    static defaultProps = {
-        tooltipPos: 'bottom'
+        onActivate: PropTypes.func
     };
     state = {
         popup: false,
@@ -73,11 +68,6 @@ export default class MenuButton extends React.Component {
                     <span className="menubotton-button-arrow">
                         <Icon icon="chevron-down" />
                     </span>
-                    {this.props.tooltip ? (
-                        <span className={"menubutton-tooltip " + ("menubutton-tooltip-" + this.props.tooltipPos)}>
-                            {this.props.tooltip}
-                        </span>
-                    ) : null}
                 </div>
                 {this.el && this.state.popup ? (
                     <PopupMenu className={"menubutton-menu" + (this.props.menuClassName ? " " + this.props.menuClassName : "")} onClose={() => this.setState({popup: false})} width={rect.width} x={rect.left} y={rect.bottom}>

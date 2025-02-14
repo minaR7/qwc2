@@ -216,6 +216,7 @@ class MapFilter extends React.Component {
         // Validate parameters with test request
         const themeLayer = this.props.layers.find(layer => layer.role === LayerRole.THEME);
         if (themeLayer) {
+            console.log("MapFilter=> rendering Map:") //, themeLayer
             const wmsParams = LayerUtils.buildWMSLayerParams(themeLayer, {filterParams: layerExpressions, filterGeom: this.state.geomFilter.geom}).params;
             const wmsLayers = wmsParams.LAYERS.split(",");
             const reqParams = {
@@ -239,11 +240,19 @@ class MapFilter extends React.Component {
                 headers: {'content-type': 'application/x-www-form-urlencoded'},
                 responseType: "blob"
             };
-            axios.post(themeLayer.url, new URLSearchParams(reqParams).toString(), options).then(() => {
-                this.setState({filterInvalid: false});
-            }).catch(() => {
-                this.setState({filterInvalid: true});
-            });
+            if(themeLayer.id==="getMap" || themeLayer.id==="GetMap")
+            {
+
+            }
+            else
+            {
+                axios.post(themeLayer.url, new URLSearchParams(reqParams).toString(), options).then(() => {
+                    console.log("MapFilter POST req: ") //, themeLayer
+                    this.setState({filterInvalid: false});
+                }).catch(() => {
+                    this.setState({filterInvalid: true});
+                });
+            }
         }
         const permalinkState = Object.entries(this.state.filters).reduce((res, [key, value]) => {
             if (value.active) {

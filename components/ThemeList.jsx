@@ -99,6 +99,7 @@ class ThemeList extends React.Component {
 
         return (
             <ul className="theme-group-body">
+                {/* {console.log(group.items)} */}
                 {(!isEmpty(group.items) ? group.items : []).map(item => {
                     const infoLinks = (item.themeInfoLinks && item.themeInfoLinks.entries || []).map(name => this.props.themes.themeInfoLinks.find(entry => entry.name === name)).filter(entry => entry);
                     const matches = [];
@@ -140,6 +141,7 @@ class ThemeList extends React.Component {
                                 <Icon icon="triangle-down" />
                                 {this.state.visibleThemeInfoMenu === item.id ? (
                                     <div className="theme-item-info-links" onClick={ev => ev.stopPropagation()}>
+                                        {console.log(link)}
                                         {infoLinks.map(link => (
                                             <a href={link.url} key={link.name} target={link.target}>{link.title}</a>
                                         ))}
@@ -155,6 +157,7 @@ class ThemeList extends React.Component {
                                     {this.props.allowAddingOtherThemeLayers ? (<Icon icon="layers" onClick={ev => this.getThemeLayersToList(ev, item)} title={addLayersTitle} />) : null}
                                     {this.props.allowAddingOtherThemes ? (<Icon icon="plus" onClick={ev => this.addThemeLayers(ev, item)} title={addTitle} />) : null}
                                     <Icon icon="open_link" onClick={ev => this.openInTab(ev, item.id)} title={openTabTitle} />
+                                       {/* {console.log(item.id)} */}
                                     {this.props.showDefaultThemeSelector && username  ? (<Icon className={ (this.extractThemeId(this.props.defaultUrlParams) === item.id ? "icon-active" : "")} icon="new" onClick={ev => this.changeDefaultUrlParams(ev, item.id)} title={changeDefaultUrlTitle} />) : null }
                                 </div>
                             ) : (
@@ -215,14 +218,17 @@ class ThemeList extends React.Component {
         return Object.fromEntries(text.split("&").map(x => x.split("="))).t;
     };
     setTheme = (theme) => {
+        console.log("we get here, after clicking on a theme in portal. \ntheme:", theme, "\n this.props =>", this.props)
         if (theme.restricted) {
             // eslint-disable-next-line
             alert(LocaleUtils.tr("themeswitcher.restrictedthemeinfo"));
             return;
         }
         const hasUserLayer = this.props.layers.find(layer => layer.role === LayerRole.USERLAYER);
+        console.log("Checking layer settings. \nhasUserLayer", hasUserLayer, "\nLayerRole.USERLAYER", LayerRole.USERLAYER)
         const preserveNonThemeLayers = ConfigUtils.getConfigProp("preserveNonThemeLayersOnThemeSwitch", this.props.activeTheme);
         // eslint-disable-next-line
+        console.log("\preserveNonThemeLayers", preserveNonThemeLayers, "\ncondition", hasUserLayer && !preserveNonThemeLayers && !confirm(LocaleUtils.tr("themeswitcher.confirmswitch")))
         if (hasUserLayer && !preserveNonThemeLayers && !confirm(LocaleUtils.tr("themeswitcher.confirmswitch"))) {
             return;
         }
@@ -250,10 +256,19 @@ class ThemeList extends React.Component {
         // Show layer tree to notify user that something has happened
         this.props.setCurrentTask('LayerTree');
     };
+    // openInTab = (ev, themeid) => {
+    //     ev.stopPropagation();
+    //     const url = location.href.split("?")[0] + '?t=' + themeid;
+    //     console.log(url)
+    //     window.open(url, '_blank');
+    // };
     openInTab = (ev, themeid) => {
-        ev.stopPropagation();
-        const url = location.href.split("?")[0] + '?t=' + themeid;
-        window.open(url, '_blank');
+      ev.stopPropagation();
+      const nextJsHost = "http://localhost:3001"; // Replace with your deployed Next.js hostname
+      const testurl = location.href.split("?")[0] + '?t=' + themeid;
+      const url = `${nextJsHost}/qgis?t=${themeid}`;
+      console.log("url", url, "\ntesturl", testurl, ev);
+      window.open(url, '_blank');
     };
     changeDefaultUrlParams = (ev, themeid) => {
         ev.stopPropagation();

@@ -130,6 +130,7 @@ div.identify-body .identify-result-title > span:not(.icon) {
     flex: 1 1 auto;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: white;
 }
 
 div.identify-body .identify-result-title > span.icon {

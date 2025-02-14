@@ -1,0 +1,10 @@
+{
+    "name": "my-react-map-plugin",
+    "description": "A plugin to display a custom React map",
+    "components": [
+      {
+        "name": "MyReactMap",
+        "component": "./src/MyReactMap.jsx"
+      }
+    ]
+  }

@@ -36,6 +36,7 @@ const defaultState = {
 };
 
 export default function map(state = defaultState, action) {
+    // console.log(action)
     // Always reset mapStateSource, CHANGE_MAP_VIEW will set it if necessary
     if (state.mapStateSource) {
         state = {...state, mapStateSource: null};
@@ -50,7 +51,7 @@ export default function map(state = defaultState, action) {
         const newParams = {};
         const positionFormat = ConfigUtils.getConfigProp("urlPositionFormat");
         const positionCrs = ConfigUtils.getConfigProp("urlPositionCrs") || newState.projection;
-        const prec = CoordinatesUtils.getPrecision(positionCrs);
+        const prec = CoordinatesUtils.getUnits(positionCrs) === 'degrees' ? 4 : 0;
         if (positionFormat === "centerAndZoom") {
             const center = CoordinatesUtils.reproject(newState.center, newState.projection, positionCrs);
             const scale = Math.round(MapUtils.computeForZoom(newState.scales, newState.zoom));
@@ -73,15 +74,25 @@ export default function map(state = defaultState, action) {
         let bounds;
         let center;
         let zoom;
-        if (action.view.center) {
+        if (action?.view?.center) {
             center = CoordinatesUtils.reproject(action.view.center, action.view.crs || action.crs, action.crs);
             zoom = action.view.zoom;
             bounds = MapUtils.getExtentForCenterAndZoom(center, zoom, resolutions, state.size);
         } else {
-            bounds = CoordinatesUtils.reprojectBbox(action.view.bounds, action.view.crs || state.projection, action.crs);
-            center = [0.5 * (bounds[0] + bounds[2]), 0.5 * (bounds[1] + bounds[3])];
-            zoom = MapUtils.getZoomForExtent(bounds, resolutions, state.size, 0, action.scales.length - 1);
+            if(action.capabilities)
+            {
+                bounds = action.view.bounds;
+                center = [0.5 * (bounds[0] + bounds[2]), 0.5 * (bounds[1] + bounds[3])];
+                zoom = MapUtils.getZoomForExtent(bounds, resolutions, state.size, 0, action.scales.length - 1);
+            }
+            else
+            {
+                bounds = CoordinatesUtils.reprojectBbox(action.view.bounds, action.view.crs || state.projection, action.crs);
+                center = [0.5 * (bounds[0] + bounds[2]), 0.5 * (bounds[1] + bounds[3])];
+                zoom = MapUtils.getZoomForExtent(bounds, resolutions, state.size, 0, action.scales.length - 1);
+            }
         }
+        console.log("actions => CONFIGURE_MAP", action, bounds, center)
         return {
             ...state,
             bbox: {...state.bbox, bounds: bounds},

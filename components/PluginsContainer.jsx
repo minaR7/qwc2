@@ -32,6 +32,7 @@ class PluginsContainer extends React.Component {
         };
         return pluginsConfig.map((pluginConf, idx) => {
             const Plugin = allPlugins[pluginConf.name + "Plugin"];
+            // console.log(Plugin, pluginConf)
             if (!Plugin) {
                 // eslint-disable-next-line
                 console.warn("Non-existing plugin: " + pluginConf.name);
@@ -49,6 +50,7 @@ class PluginsContainer extends React.Component {
             return (
                 <div id="PluginsContainer">
                     {this.renderPlugins(this.props.pluginsConfig[this.props.mode])}
+                    {console.log("What is in PluginsContainer? \n", this)}
                     <WindowManager />
                 </div>
             );

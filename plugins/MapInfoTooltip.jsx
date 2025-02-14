@@ -53,6 +53,10 @@ import './style/MapInfoTooltip.css';
  */
 class MapInfoTooltip extends React.Component {
     static propTypes = {
+        /** The number of decimal places to display for metric/imperial coordinates. */
+        cooPrecision: PropTypes.number,
+        /** The number of decimal places to display for degree coordinates. */
+        degreeCooPrecision: PropTypes.number,
         displaycrs: PropTypes.string,
         /** The number of decimal places to display for elevation values. */
         elevationPrecision: PropTypes.number,
@@ -65,6 +69,8 @@ class MapInfoTooltip extends React.Component {
         setCurrentTask: PropTypes.func
     };
     static defaultProps = {
+        cooPrecision: 0,
+        degreeCooPrecision: 4,
         elevationPrecision: 0,
         includeWGS84: true,
         plugins: []
@@ -122,10 +128,10 @@ class MapInfoTooltip extends React.Component {
         }
         projections.map(crs => {
             const coo = CoordinatesUtils.reproject(this.state.point.coordinate, this.props.map.projection, crs);
-            const decimals = CoordinatesUtils.getPrecision(crs);
+            const digits = CoordinatesUtils.getUnits(crs) === 'degrees' ? this.props.degreeCooPrecision : this.props.cooPrecision;
             info.push([
                 (CoordinatesUtils.getAvailableCRS()[crs] || {label: crs}).label,
-                coo.map(x => LocaleUtils.toLocaleFixed(x, decimals)).join(", ")
+                coo.map(x => LocaleUtils.toLocaleFixed(x, digits)).join(", ")
             ]);
         });
 
@@ -148,7 +154,7 @@ class MapInfoTooltip extends React.Component {
         const text = info.map(entry => entry.join(": ")).join("\n");
         let routingButtons = null;
         if (ConfigUtils.havePlugin("Routing")) {
-            const prec = CoordinatesUtils.getPrecision(this.props.displaycrs);
+            const prec = CoordinatesUtils.getUnits(this.props.displaycrs) === 'degrees' ? 4 : 0;
             const pos = CoordinatesUtils.reproject(this.state.point.coordinate, this.props.map.projection, this.props.displaycrs);
             const point = {
                 text: pos.map(x => x.toFixed(prec)).join(", ") + " (" + this.props.displaycrs + ")",

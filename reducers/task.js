@@ -19,6 +19,8 @@ const defaultState = {
 export default function task(state = defaultState, action) {
     switch (action.type) {
     case SET_CURRENT_TASK: {
+        console.log("Action received:", action);
+        console.log("State before update:", state);
         if (state.blocked) {
             return state;
         }

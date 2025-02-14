@@ -158,7 +158,8 @@ class MapPlugin extends React.Component {
                                     params: {
                                         LAYERS: paramLayers.slice(0, j).join(","),
                                         OPACITIES: paramOpacities.slice(0, j).join(","),
-                                        STYLES: paramStyles.slice(0, j).join(",")
+                                        STYLES: paramStyles.slice(0, j).join(","),
+                                        FILTER: "j",
                                     }
                                 });
                             }
@@ -168,7 +169,8 @@ class MapPlugin extends React.Component {
                                 params: {
                                     LAYERS: paramLayers[j],
                                     OPACITIES: paramOpacities[j],
-                                    STYLES: paramStyles[j]
+                                    STYLES: paramStyles[j],
+                                    FILTER: "j",
                                 }
                             };
                             newLayers.push(swipeLayer);
@@ -179,7 +181,8 @@ class MapPlugin extends React.Component {
                                     params: {
                                         LAYERS: paramLayers.slice(j + 1).join(","),
                                         OPACITIES: paramOpacities.slice(j + 1).join(","),
-                                        STYLES: paramStyles.slice(j + 1).join(",")
+                                        STYLES: paramStyles.slice(j + 1).join(","),
+                                        FILTER: "j",
                                     }
                                 });
                             }
@@ -208,6 +211,7 @@ class MapPlugin extends React.Component {
             }
             ++zIndex;
             const swipe = this.props.swipe !== null && layer === this.state.swipeLayer;
+            console.log("renderLayers in Map, OlLayer: ", layer)
             return (
                 <OlLayer key={layer.uuid} options={layer} swipe={swipe ? this.props.swipe : null} zIndex={layer.zIndex ?? zIndex} />
             );
@@ -215,6 +219,7 @@ class MapPlugin extends React.Component {
     };
     renderSupportTools = () => {
         return Object.entries(this.props.tools).map(([key, Tool]) => {
+            // console.log("renderSupportTools in Map: ", key, Tool)
             const options = this.props.toolsOptions[key] || {};
             return <Tool key={key} options={options}/>;
         });
@@ -237,7 +242,9 @@ class MapPlugin extends React.Component {
         }
         return [(
             <OlMap id="map" key="map" mapOptions={this.props.mapOptions} {...this.props.map} fullExtent={this.props.theme?.bbox}>
+                {console.log("renderLayers in Map, OlMap: ", this)}
                 {this.renderLayers()}
+                {/* {console.log("renderSupportTools in Map, OlMap: ")} */}
                 {this.renderSupportTools()}
             </OlMap>
         ), loadingIndicator];

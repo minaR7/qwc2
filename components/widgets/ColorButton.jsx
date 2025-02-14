@@ -30,16 +30,11 @@ const defaultColors = [
 export default class ColorButton extends React.Component {
     static propTypes = {
         color: PropTypes.array,
-        defaultColors: PropTypes.array,
         onColorChanged: PropTypes.func
     };
     static defaultProps = {
-        defaultColors: defaultColors,
         color: [255, 255, 255, 1],
         onColorChanged: (/* color */) => {}
-    };
-    state = {
-        colors: defaultColors
     };
     constructor(props) {
         super(props);
@@ -48,7 +43,6 @@ export default class ColorButton extends React.Component {
             hexStr: null
         };
         this.pickerEl = null;
-        this.state.colors = props.defaultColors;
     }
     render() {
         const pickerStyle = {
@@ -62,7 +56,7 @@ export default class ColorButton extends React.Component {
                 </span>
                 <div className="colorbutton-picker" ref={el => { this.pickerEl = el; }} style={pickerStyle}>
                     <div className="colorbutton-picker-icons">
-                        {this.state.colors.map((color, idx) => (
+                        {defaultColors.map((color, idx) => (
                             <span className="colorbutton-icon" key={"color" + idx} onClick={() => this.selectColor(idx)} onContextMenu={ev => this.replaceDefaultColor(ev, idx)}>
                                 <span style={{backgroundColor: this.cssColor(color)}} />
                             </span>
@@ -105,14 +99,10 @@ export default class ColorButton extends React.Component {
     };
     selectColor = (idx) => {
         this.setState({hexStr: null});
-        this.props.onColorChanged([...this.state.colors[idx]]);
+        this.props.onColorChanged([...defaultColors[idx]]);
     };
     replaceDefaultColor = (ev, idx) => {
-        this.setState(state => {
-            const newColors = [...state.colors];
-            newColors[idx] = [...this.props.color];
-            return {colors: newColors};
-        });
+        defaultColors[idx] = [...this.props.color];
         this.forceUpdate();
         ev.preventDefault();
     };

@@ -43,7 +43,7 @@ export class SideBar extends React.Component {
         onHide: () => {},
         width: '15em',
         menuMargins: {left: 0, right: 0},
-        minWidth: '15em',
+        minWidth: '45em',
         // allowed values are 'left' and 'right'
         side: 'right'
     };

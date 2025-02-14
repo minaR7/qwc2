@@ -8,6 +8,8 @@
  */
 
 import ColorLayer from '@giro3d/giro3d/core/layer/ColorLayer';
+import {connect} from 'react-redux';
+import StandardStore from '../../../stores/StandardStore';
 import TiledImageSource from '@giro3d/giro3d/sources/TiledImageSource.js';
 import axios from 'axios';
 import ol from 'openlayers';
@@ -16,10 +18,31 @@ import url from 'url';
 import ConfigUtils from '../../../utils/ConfigUtils';
 import CoordinatesUtils from '../../../utils/CoordinatesUtils';
 import MiscUtils from '../../../utils/MiscUtils';
+import {UrlParams} from '../../../utils/PermaLinkUtils';
 
+function periodicWmsImageLoad(image, src, interval = 100000) { // Default interval: 5000ms
+    const loadImage = () => wmsImageLoadFunction(image, src);
+
+    // Initial call to load the image immediately
+    loadImage();
+
+    // Start periodic calls
+    const timerId = setInterval(loadImage, interval);
+
+    // Return the timerId for stopping the periodic calls later
+    return timerId;
+}
+
+function periodicLayerCreation(options, map, interval) {
+    setInterval(() => {
+        const layer = createLayer(options, map);
+        console.log('Layer created periodically:', layer);
+    }, interval);
+}
 
 function wmsImageLoadFunction(image, src) {
     const maxUrlLength = ConfigUtils.getConfigProp("wmsMaxGetUrlLength", null, 2048);
+    // console.log(`[${new Date().toLocaleTimeString()}]`,"WMSLayer.js => wmsImageLoadFunction: ", image, src, maxUrlLength )
     const postOrigins = ConfigUtils.getConfigProp("wmsPostOrigins", null, []);
     const reqOrigin = (new URL(src, location.href)).origin;
     if (src.length > maxUrlLength && (location.origin === reqOrigin || postOrigins.includes(reqOrigin))) {
@@ -31,22 +54,48 @@ function wmsImageLoadFunction(image, src) {
             responseType: "blob"
         };
         axios.post(urlParts[0], urlParts[1], options).then(response => {
+            console.log("wmsImageLoadFunction POST req: ", urlParts)
             const reader = new FileReader();
             reader.readAsDataURL(response.data);
             reader.onload = () => {
                 image.src = reader.result;
             };
         }).catch(() => {
+            console.log("Fall back to GET")
             // Fall back to GET
             image.src = src;
         });
     } else {
+        console.log("Fall back to GET")
         image.src = src;
     }
 }
 
 function wmsToOpenlayersOptions(options) {
+    console.log(options)
+    // Get filter state from Redux store
+    const state = StandardStore.get().getState();
+    console.log(state.filter)
+    // const filterValue = `narco: "flag" = ${state.filter.filterParam}`
+    // const filterValue = `narco: "flag" = Irani`
     const urlParams = Object.entries(url.parse(options.url, true).query).reduce((res, [key, val]) => ({...res, [key.toUpperCase()]: val}), {});
+    const urlFilter = UrlParams.getParams()['f'];
+    // console.log("new technique for filter:", urlParams, urlFilter)
+
+    
+    const { layerName, flag, vessel_name, type, quantity, operator } = state.filter;
+    // const { layerName, flag, vessel_name, type, quantity, operator } = options.params.FILTER
+    const conditions = [];
+    if (flag && flag!=="all") conditions.push(`"flag" = '${flag}'`);
+    if (vessel_name && vessel_name!=="") conditions.push(`"vessel_name" = '${vessel_name}'`);
+    if (type) conditions.push(`"type" = '${type}'`);
+    if (quantity) conditions.push(`"quantity" ${operator} '${quantity}'`);
+    console.log(conditions)
+
+    const filterValue = conditions.length > 0 ? `${layerName}: ${conditions.join(" AND ")}` : "";
+    if(state?.filter && options?.params)
+    options.params.FILTER = filterValue;
+console.log("FILTER", options.params.FILTER,filterValue)
     return {
         ...urlParams,
         LAYERS: options.name,
@@ -57,6 +106,10 @@ function wmsToOpenlayersOptions(options) {
         CRS: options.projection,
         TILED: String(urlParams.TILED ?? options.tiled ?? false).toLowerCase() === "true",
         VERSION: options.version,
+        // FILTER: options.params?.FILTER || filterValue,
+        FILTER: filterValue,
+        // FILTER: urlFilter,
+        // FILTER: `narco: "start" > '${options.startDate}' AND "start" < '${options.endDate}'`,
         DPI: options.serverType === 'qgis' ? (options.dpi || ConfigUtils.getConfigProp("wmsDpi") || 96) : undefined,
         ...options.params
     };
@@ -64,12 +117,17 @@ function wmsToOpenlayersOptions(options) {
 
 export default {
     create: (options, map) => {
+        // const state = store.getState(); // ✅ Get the Redux state
+        // const filterFlag = state.filters.mapFilter; // ✅ Access the map filter
+        // console.log("filterrr", filterFlag)
         const queryParameters = {...wmsToOpenlayersOptions(options), __t: +new Date()};
+        console.log(queryParameters)
         if (queryParameters.TILED && !options.bbox) {
             /* eslint-disable-next-line */
             console.warn("Tiled WMS requested without specifying bounding box, falling back to non-tiled.");
         }
         if (!queryParameters.TILED || !options.bbox) {
+            console.warn("Tiled WMS request.", options, map);
             const layer = new ol.layer.Image({
                 minResolution: options.minResolution,
                 maxResolution: options.maxResolution,
@@ -97,7 +155,6 @@ export default {
             const layer = new ol.layer.Tile({
                 minResolution: options.minResolution,
                 maxResolution: options.maxResolution,
-                preload: ConfigUtils.getConfigProp("tilePreloadLevels", null, 0),
                 source: new ol.source.TileWMS({
                     urls: [options.url.split("?")[0]],
                     params: queryParameters,

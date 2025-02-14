@@ -222,8 +222,11 @@ class MapSelection extends React.Component {
             return;
         }
         const settings = {
+            mapCrs: this.props.projection,
+            displayCrs: this.props.projection,
             lenUnit: 'metric',
-            areaUnit: 'metric'
+            areaUnit: 'metric',
+            decimals: 0
         };
         MeasureUtils.updateFeatureMeasurements(feature, this.props.geomType, this.props.projection, settings);
     };

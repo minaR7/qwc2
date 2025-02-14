@@ -18,7 +18,6 @@ import './style/TopBar3D.css';
 
 export default class TopBar3D extends React.Component {
     static propTypes = {
-        options: PropTypes.object,
         sceneContext: PropTypes.object,
         taskContext: PropTypes.object
     };
@@ -26,12 +25,11 @@ export default class TopBar3D extends React.Component {
     };
     render() {
         const menuItems = [
-            {key: "LayerTree3D", icon: "layers"},
-            {key: "DateTime3D", icon: "clock"}
+            {key: "LayerTree3D", icon: "layers"}
         ];
         return (
             <div className="map3d-topbar">
-                <SearchField3D options={this.props.options} sceneContext={this.props.sceneContext} />
+                <SearchField3D sceneContext={this.props.sceneContext} />
                 <span className="map3d-topbar-spacer" />
                 <AppMenu appMenuClearsTask buttonContents={this.menuButtonContents()}
                     currentTask={this.props.taskContext.currentTask} menuItems={menuItems}

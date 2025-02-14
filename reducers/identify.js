@@ -15,6 +15,12 @@ const defaultState = {
 export default function identify(state = defaultState, action) {
     switch (action.type) {
     case SET_IDENTIFY_TOOL: {
+        console.log("Action received:", action);
+        console.log("State before update:", state);
+        console.log("State after update:", {
+            ...state,
+            tool: action.tool,
+        });
         return {...state, tool: action.tool};
     }
     default:

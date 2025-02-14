@@ -227,6 +227,7 @@ class OlMap extends React.Component {
         return vert && ol.events.condition.shiftKeyOnly(ev) && ol.events.condition.targetNotEditable(ev);
     };
     render() {
+        // console.log("qwc2-demo-app/qwc2/components/map/OlMap.jsx")
         if (this.state.rebuildView) {
             const overviewMap = this.map.getControls().getArray().find(control => control instanceof ol.control.OverviewMap);
             const view = this.createView(this.props.center, this.props.zoom, this.props.projection, this.props.resolutions, this.state.mapOptions.enableRotation, this.state.mapOptions.rotation);
@@ -271,6 +272,7 @@ class OlMap extends React.Component {
 
         return (
             <div id={this.props.id} key="map" style={style}>
+                {/* {console.log("jsx", this.props.id, "\nchildren", children)} */}
                 {children}
             </div>
         );

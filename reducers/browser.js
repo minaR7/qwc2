@@ -10,7 +10,6 @@
 import {CHANGE_BROWSER_PROPERTIES} from '../actions/browser';
 
 const defaultState = {};
-
 export default function browser(state = defaultState, action) {
     switch (action.type) {
     case CHANGE_BROWSER_PROPERTIES: {

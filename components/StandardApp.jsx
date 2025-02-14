@@ -128,6 +128,7 @@ class AppInitComponent extends React.Component {
                 const visibleBgLayer = params.bl || params.bl === '' ? params.bl : null;
                 let initialView = null;
                 if (theme) {
+                    console.log(theme, params)
                     if (params.c && params.s !== undefined) {
                         const coords = params.c.split(/[;,]/g).map(x => parseFloat(x) || 0);
                         const scales = theme.scales || themes.defaultScales;

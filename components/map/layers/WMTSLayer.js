@@ -11,7 +11,6 @@ import ColorLayer from '@giro3d/giro3d/core/layer/ColorLayer';
 import TiledImageSource from "@giro3d/giro3d/sources/TiledImageSource.js";
 import ol from 'openlayers';
 
-import ConfigUtils from '../../../utils/ConfigUtils';
 import CoordinatesUtils from '../../../utils/CoordinatesUtils';
 
 function getWMSURLs(urls) {
@@ -61,7 +60,6 @@ export default {
         return new ol.layer.Tile({
             minResolution: options.minResolution,
             maxResolution: options.maxResolution,
-            preload: ConfigUtils.getConfigProp("tilePreloadLevels", null, 0),
             source: createWMTSSource(options),
             ...(options.layerConfig || {})
         });

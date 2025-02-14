@@ -16,7 +16,8 @@ const defaultState = {
     area: 0,
     bearing: 0,
     lenUnit: 'metric',
-    areaUnit: 'metric'
+    areaUnit: 'metric',
+    decimals: 2
 };
 
 export default function measurement(state = defaultState, action) {

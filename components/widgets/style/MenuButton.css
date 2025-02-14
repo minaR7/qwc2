@@ -3,6 +3,10 @@ div.menubutton {
     align-items: center;
 }
 
+div.menubutton-disabled {
+    pointer-events: none;
+}
+
 div.menubutton-button {
     position: relative;
     flex: 1 1 auto;
@@ -18,15 +22,15 @@ div.menubutton-disabled div.menubutton-button {
     color: var(--text-color-disabled);
 }
 
-div.menubutton:not(.menubutton-disabled) div.menubutton-button:active > span.menubutton-button-content,
-div.menubutton:not(.menubutton-disabled) div.menubutton-button:active > span.menubotton-button-arrow {
+div.menubutton-button:active > span.menubutton-button-content,
+div.menubutton-button:active > span.menubotton-button-arrow {
     position: relative!important;
     left: 1px;
     top: 1px;
 }
 
-div.menubutton:not(.menubutton-disabled)  div.menubutton-button:hover,
-div.menubutton:not(.menubutton-disabled) div.menubutton-button-hover {
+div.menubutton-button:hover,
+div.menubutton-button-hover {
     background-color: var(--button-bg-color-hover);
     color: var(--button-text-color-hover);
 }
@@ -36,8 +40,8 @@ div.menubutton-button-active {
     color: var(--button-text-color-active);
 }
 
-div.menubutton:not(.menubutton-disabled) div.menubutton-button-active:hover,
-div.menubutton:not(.menubutton-disabled) div.menubutton-button-active.menubutton-button-hover {
+div.menubutton-button-active:hover,
+div.menubutton-button-active.menubutton-button-hover {
     background-color: var(--button-bg-color-active-hover);
     color: var(--button-text-color-active-hover);
 }
@@ -51,7 +55,7 @@ span.menubutton-button-content {
     align-items: center;
 }
 
-div.menubutton span.menubotton-button-arrow {
+div.menubutton-menubutton > span.menubotton-button-arrow {
     height: 100%;
     display: flex;
     align-items: flex-end;
@@ -59,7 +63,11 @@ div.menubutton span.menubotton-button-arrow {
     padding: 0.2em;
 }
 
-div.menubutton-togglebutton span.menubotton-button-arrow {
+div.menubutton-togglebutton > span.menubotton-button-arrow {
+    padding: 0 0.125em;
+    height: 100%;
+    display: flex;
+    align-items: center;
     border-left: 1px solid var(--border-color);
 }
 
@@ -91,32 +99,4 @@ div.menubutton-menu > div.menubutton-menu-active:hover {
 
 div.menubutton-menu-disabled {
     color: var(--text-color-disabled);
-}
-
-span.menubutton-tooltip {
-    position: absolute;
-    display: none;
-    background-color: var(--tooltip-bg-color);
-    border: 1px solid var(--tooltip-border-color);
-    color: var(--tooltip-text-color);
-    font-size: 75%;
-    font-weight: normal;
-    padding: 0.5em;
-    border-radius: 0.5em;
-    white-space: nowrap;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-}
-
-span.menubutton-tooltip-top {
-    bottom: 110%;
-}
-
-span.menubutton-tooltip-bottom {
-    top: 110%;
-}
-
-div.menubutton:hover span.menubutton-tooltip {
-    display: inline;
 }

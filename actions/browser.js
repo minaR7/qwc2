@@ -15,6 +15,7 @@ export const CHANGE_BROWSER_PROPERTIES = 'CHANGE_BROWSER_PROPERTIES';
 
 
 export function changeBrowserProperties(properties) {
+    console.log(properties)
     return {
         type: CHANGE_BROWSER_PROPERTIES,
         newProperties: properties

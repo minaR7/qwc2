@@ -15,6 +15,7 @@ import ConfigUtils from '../utils/ConfigUtils';
 export const SET_IDENTIFY_TOOL = 'SET_IDENTIFY_TOOL';
 
 export function setIdentifyEnabled(enabled, theme = null) {
+    console.log("actions: enabled, theme",enabled, theme)
     return (dispatch, getState) => {
         let identifyTool = ConfigUtils.getConfigProp("identifyTool", theme || getState().theme.current);
         identifyTool = identifyTool !== undefined ? identifyTool : "Identify";

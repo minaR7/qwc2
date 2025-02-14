@@ -24,7 +24,8 @@
     --panel-bg-color: rgba(255, 255, 255, 0.75);
     --panel-text-color: #595959;
     /* Titlebars */
-    --titlebar-bg-color: #595959;
+    /* --titlebar-bg-color: #595959; */
+    --titlebar-bg-color: #063970;
     --titlebar-text-color: white;
     /* Button */
     --button-bg-color: #e9e9e9;

@@ -256,9 +256,11 @@ class RedliningSupport extends React.Component {
         const hadMeasurements = !!feature.get('measurements');
         if (this.props.redlining.measurements) {
             const settings = {
+                mapCrs: this.props.mapCrs,
                 displayCrs: this.props.displayCrs,
                 lenUnit: this.props.redlining.lenUnit,
-                areaUnit: this.props.redlining.areaUnit
+                areaUnit: this.props.redlining.areaUnit,
+                decimals: 2
             };
             MeasureUtils.updateFeatureMeasurements(feature, feature.get('shape'), this.props.mapCrs, settings);
         } else if (hadMeasurements) {

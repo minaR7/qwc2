@@ -21,13 +21,16 @@ export const SET_CURRENT_TASK = 'SET_CURRENT_TASK';
 export const SET_CURRENT_TASK_BLOCKED = 'SET_CURRENT_TASK_BLOCKED';
 
 export function setCurrentTask(task, mode = null, mapClickAction = null, data = null) {
+    console.log("task", task, "data", data)
     return (dispatch, getState) => {
         // Don't do anything if current task is blocked
         if (getState().task && getState().task.blocked === true) {
+            console.log("current task is blocked")
             return;
         }
         // Attempt to read mapClickAction from plugin configuration block if not set
         if (!mapClickAction) {
+            console.log("mapClickAction", mapClickAction)
             const device = getState().browser && getState().browser.mobile ? 'mobile' : 'desktop';
             mapClickAction = (getState().localConfig.plugins[device] || []).find(config => config.name === task)?.mapClickAction;
         }

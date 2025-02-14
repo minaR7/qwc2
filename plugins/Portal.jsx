@@ -75,6 +75,7 @@ class Portal extends React.Component {
         } else if (!prevProps.themes && this.props.themes && this.props.currentTask !== "Portal") {
             // Show portal if no theme is to be loaded
             const theme = ThemeUtils.getThemeById(this.props.themes, UrlParams.getParam('t'));
+            console.log("portal", theme)
             if ((!theme || theme.restricted) && (ConfigUtils.getConfigProp("dontLoadDefaultTheme") || !this.props.themes.defaultTheme)) {
                 this.props.setCurrentTask("Portal");
             }
@@ -89,8 +90,9 @@ class Portal extends React.Component {
         return (
             <div className="Portal">
                 <div className="portal-topbar">
-                    <img className="portal-logo" src={assetsPath + "/img/" + this.props.logo} />
-                    <span className="portal-topbar-text" dangerouslySetInnerHTML={{__html: this.props.topBarText}} />
+                    {console.log("in portal")}
+                    {/* <img className="portal-logo" src={assetsPath + "/img/" + this.props.logo} /> */}
+                    {/* <span className="portal-topbar-text" dangerouslySetInnerHTML={{__html: this.props.topBarText}} /> */}
                     <input
                         className="portal-search-field"
                         onChange={ev => this.setState({filter: ev.target.value})}
@@ -98,16 +100,17 @@ class Portal extends React.Component {
                         type="text"
                         value={this.state.filter} />
                     <span className="portal-topbar-spacer" />
-                    <AppMenu appMenuClearsTask={false} buttonContents={this.menuButtonContents()}
+                    {/* <AppMenu appMenuClearsTask={false} buttonContents={this.menuButtonContents()}
                         keepMenuOpen={this.props.keepMenuOpen} menuItems={this.props.menuItems} onMenuToggled={this.menuToggled}
-                        openExternalUrl={this.openUrl}
-                        showOnStartup={this.props.showMenuOnStartup} />
+                        openExternalUrl={this.openUrl} /> */}
+
+                        {/* showOnStartup={this.props.showMenuOnStartup} */}
                 </div>
                 <div className={"portal-body " + (this.state.menuVisible ? "portal-body-menuvisible" : "")}>
                     <ThemeList collapsibleGroups dontPreserveSettingsOnSwitch={!preserveSettings} filter={this.state.filter} />
                 </div>
                 <div className="portal-bottombar">
-                    {this.props.userName ? (
+                    {/* {this.props.userName ? (
                         <div className="portal-bottombar-user">
                             <Icon icon="logout" /><span>{this.props.userName}</span>
                         </div>
@@ -119,7 +122,7 @@ class Portal extends React.Component {
                                 <a href="#" key={"l" + idx} onClick={() => this.openUrl(link.href, link.target, {title: label})}>{label}</a>
                             );
                         })}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );

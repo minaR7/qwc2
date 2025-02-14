@@ -17,6 +17,7 @@ import {toggleFullscreen} from '../actions/display';
 import {setTopbarHeight} from '../actions/map';
 import {openExternalUrl} from '../actions/task';
 import {restoreDefaultTheme} from '../actions/theme';
+import { setMapFilter } from '../actions/filters';
 import Icon from '../components/Icon';
 import {Swipeable} from '../components/Swipeable';
 import ConfigUtils from '../utils/ConfigUtils';
@@ -57,6 +58,8 @@ class TopBar extends React.Component {
         menuItems: PropTypes.array,
         mobile: PropTypes.bool,
         openExternalUrl: PropTypes.func,
+        setMapFilter: PropTypes.func,
+        mapFilter: PropTypes.string,
         restoreDefaultTheme: PropTypes.func,
         /** Options passed down to the search component. */
         searchOptions: PropTypes.shape({
@@ -115,12 +118,6 @@ class TopBar extends React.Component {
         allowedMenuItems: [],
         allowedToolbarItems: []
     };
-    componentDidMount() {
-        this.setState({
-            allowedToolbarItems: this.allowedItems(this.props.toolbarItems),
-            allowedMenuItems: this.allowedItems(this.props.menuItems)
-        });
-    }
     componentDidUpdate(prevProps) {
         if (this.props.currentTheme !== prevProps.currentTheme) {
             this.setState({
@@ -129,7 +126,12 @@ class TopBar extends React.Component {
             });
         }
     }
+    handleUpdate = () => {
+        const flag = "Irani";
+        this.props.setMapFilter(flag);// Dispatch action to update Redux store
+      };
     render() {
+        console.log(this.props.components)
         let buttonContents;
         let logo;
         const assetsPath = ConfigUtils.getAssetsPath();
@@ -144,8 +146,8 @@ class TopBar extends React.Component {
         } else {
             buttonContents = (
                 <span className="appmenu-button">
-                    <span className="appmenu-label">{LocaleUtils.tr("appmenu.menulabel")}</span>
                     <Icon className="appmenu-icon" icon="menu-hamburger" title={tooltip}/>
+                    <span className="appmenu-label">{LocaleUtils.tr("appmenu.menulabel")}</span>
                 </span>
             );
             logo = assetsPath + "/img/logo."  + this.props.logoFormat;
@@ -161,6 +163,7 @@ class TopBar extends React.Component {
         }
         // Convert legacy minScale option to minScaleDenom
         const searchOptions = {...this.props.searchOptions};
+        // const flag = "Irani";
         searchOptions.minScaleDenom = searchOptions.minScaleDenom || searchOptions.minScale;
         delete searchOptions.minScale;
         // Menu compact only available for desktop client
@@ -178,18 +181,7 @@ class TopBar extends React.Component {
                 onSwipedDown={() => this.props.toggleFullscreen(false)}
                 onSwipedUp={() => this.props.toggleFullscreen(true)}>
                 <div className={classes} id="TopBar" ref={this.storeHeight} style={style}>
-                    {logoEl}
-                    <div className="center-span">
-                        {this.props.components.Search ? (
-                            <this.props.components.Search searchOptions={searchOptions}/>
-                        ) : null}
-                        {this.props.components.Toolbar ? (
-                            <this.props.components.Toolbar
-                                openExternalUrl={this.openUrl}
-                                toolbarItems={this.state.allowedToolbarItems}
-                                toolbarItemsShortcutPrefix={this.props.toolbarItemsShortcutPrefix} />
-                        ) : null}
-                    </div>
+                    {/* {logoEl} */}
                     {this.props.components.AppMenu && !this.props.appMenuHidden ? (
                         <this.props.components.AppMenu
                             appMenuClearsTask={this.props.appMenuClearsTask}
@@ -201,6 +193,23 @@ class TopBar extends React.Component {
                             openExternalUrl={this.openUrl}
                             showFilterField={this.props.appMenuFilterField}
                             showOnStartup={showOnStartup} />
+                    ) : null}
+                    <div className="center-span">
+                        {console.log(this)}
+                        {/* {this.props?.currentTheme?.title === "Contraband Drug Confiscation" ? (<><button onClick={this.handleUpdate}>Filter by Narco Type</button ></>) : null} */}
+                        {/* {this.props.components.Search ? (
+                            <this.props.components.Search searchOptions={searchOptions}/>
+                        ) : null} */}
+                        {this.props.components.Toolbar ? (
+                            <this.props.components.Toolbar
+                                openExternalUrl={this.openUrl}
+                                toolbarItems={this.state.allowedToolbarItems}
+                                toolbarItemsShortcutPrefix={this.props.toolbarItemsShortcutPrefix} />
+                        ) : null}
+                    </div>
+                    {/* && this.props?.currentTheme?.title === "Contraband Drug Confiscation" */}
+                    {this.props.components.Filters  ? (
+                        <this.props.components.Filters options={this.props.currentTheme} />
                     ) : null}
                     {this.props.components.FullscreenSwitcher ? (
                         <this.props.components.FullscreenSwitcher />
@@ -254,11 +263,13 @@ export default (components) => {
         fullscreen: state.display.fullscreen,
         components: components,
         currentTheme: state.theme.current,
-        mapMargins: state.windows.mapMargins
+        mapMargins: state.windows.mapMargins,
+        mapFilter: state.filter.param,
     }), {
         toggleFullscreen: toggleFullscreen,
         restoreDefaultTheme: restoreDefaultTheme,
         openExternalUrl: openExternalUrl,
-        setTopbarHeight: setTopbarHeight
+        setTopbarHeight: setTopbarHeight,
+        setMapFilter: setMapFilter
     })(TopBar);
 };

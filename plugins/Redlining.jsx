@@ -42,16 +42,6 @@ class Redlining extends React.Component {
         /** Whether to allow labeling geometric figures. */
         allowGeometryLabels: PropTypes.bool,
         changeRedliningState: PropTypes.func,
-        /** Default area unit. Options: metric, imperial, sqm, ha, sqkm, sqft, acre, sqmi */
-        defaultAreaUnit: PropTypes.string,
-        /** Default border color. In format [r, g, b, a]. */
-        defaultBorderColor: PropTypes.array,
-        /** Default fill color. In format [r, g, b, a]. */
-        defaultFillColor: PropTypes.array,
-        /** Default length unit. Options: metric, imperial, m, km, ft, mi */
-        defaultLengthUnit: PropTypes.string,
-        /** Tools to hide. Available tools: Circle, Ellipse, Square, Box, HandDrawing, Transform, NumericInput, Buffer, Export. */
-        hiddenTools: PropTypes.array,
         layers: PropTypes.array,
         mapCrs: PropTypes.string,
         mobile: PropTypes.bool,
@@ -67,14 +57,9 @@ class Redlining extends React.Component {
     };
     static defaultProps = {
         allowGeometryLabels: true,
-        hiddenTools: [],
         snapping: true,
         snappingActive: true,
-        plugins: [],
-        defaultBorderColor: [255, 0, 0, 1],
-        defaultFillColor: [255, 255, 255, 1],
-        defaultAreaUnit: 'metric',
-        defaultLengthUnit: 'metric'
+        plugins: []
     };
     state = {
         selectText: false
@@ -84,26 +69,7 @@ class Redlining extends React.Component {
         this.labelInput = null;
         window.addEventListener('keydown', this.keyPressed);
     }
-    componentDidMount() {
-        this.componentDidUpdate({redlining: {}});
-    }
     componentDidUpdate(prevProps) {
-        if (
-            this.props.defaultBorderColor !== prevProps.defaultBorderColor ||
-            this.props.defaultFillColor !== prevProps.defaultFillColor ||
-            this.props.defaultLengthUnit !== prevProps.defaultLengthUnit ||
-            this.props.defaultAreaUnit !== prevProps.defaultAreaUnit
-        ) {
-            this.props.changeRedliningState({
-                style: {
-                    ...this.props.redlining.style,
-                    borderColor: this.props.defaultBorderColor,
-                    fillColor: this.props.defaultFillColor
-                },
-                lenUnit: this.props.defaultLengthUnit,
-                areaUnit: this.props.defaultAreaUnit
-            });
-        }
         if (prevProps.redlining.geomType !== this.props.redlining.geomType && this.props.redlining.geomType === 'Text' && !this.state.selectText) {
             this.setState({selectText: true});
         }
@@ -150,51 +116,48 @@ class Redlining extends React.Component {
         this.updateRedliningState({style: newStyle});
     };
     renderBody = () => {
-        const toolEnabled = (tool) => !this.props.hiddenTools.includes(tool);
         const activeButton = this.props.redlining.action === "Draw" ? this.props.redlining.geomType : this.props.redlining.action;
         let drawButtons = [
             {key: "Point", tooltip: LocaleUtils.tr("redlining.point"), icon: "point", data: {action: "Draw", geomType: "Point", text: ""}},
             {key: "LineString", tooltip: LocaleUtils.tr("redlining.line"), icon: "line", data: {action: "Draw", geomType: "LineString", text: ""}},
             {key: "Polygon", tooltip: LocaleUtils.tr("redlining.polygon"), icon: "polygon", data: {action: "Draw", geomType: "Polygon", text: ""}},
             [
-                toolEnabled("Circle") ? {key: "Circle", tooltip: LocaleUtils.tr("redlining.circle"), icon: "circle", data: {action: "Draw", geomType: "Circle", text: ""}} : null,
-                toolEnabled("Ellipse") ? {key: "Ellipse", tooltip: LocaleUtils.tr("redlining.ellipse"), icon: "ellipse", data: {action: "Draw", geomType: "Ellipse", text: ""}} : null,
-                toolEnabled("Square") ? {key: "Square", tooltip: LocaleUtils.tr("redlining.square"), icon: "box", data: {action: "Draw", geomType: "Square", text: ""}} : null,
-                toolEnabled("Box") ? {key: "Box", tooltip: LocaleUtils.tr("redlining.rectangle"), icon: "rect", data: {action: "Draw", geomType: "Box", text: ""}} : null
-            ].filter(Boolean),
+                {key: "Circle", tooltip: LocaleUtils.tr("redlining.circle"), icon: "circle", data: {action: "Draw", geomType: "Circle", text: ""}},
+                {key: "Ellipse", tooltip: LocaleUtils.tr("redlining.ellipse"), icon: "ellipse", data: {action: "Draw", geomType: "Ellipse", text: ""}},
+                {key: "Square", tooltip: LocaleUtils.tr("redlining.square"), icon: "box", data: {action: "Draw", geomType: "Square", text: ""}},
+                {key: "Box", tooltip: LocaleUtils.tr("redlining.rectangle"), icon: "rect", data: {action: "Draw", geomType: "Box", text: ""}}
+            ],
             {key: "Text", tooltip: LocaleUtils.tr("redlining.text"), icon: "text", data: {action: "Draw", geomType: "Text", text: "", measurements: false}}
         ];
         if (this.props.mobile) {
             drawButtons = [drawButtons.flat()];
         }
         const activeFreeHand = this.props.redlining.freehand ? "HandDrawing" : null;
-        const freehandButtons = toolEnabled("HandWriting") ? [{
+        const freehandButtons = [{
             key: "HandDrawing", tooltip: LocaleUtils.tr("redlining.freehand"), icon: "freehand",
             data: {action: "Draw", geomType: this.props.redlining.geomType, text: "", freehand: !this.props.redlining.freehand},
             disabled: (this.props.redlining.geomType !== "LineString" && this.props.redlining.geomType !== "Polygon")
-        }] : [];
+        }];
         const editButtons = [
             {key: "Pick", tooltip: LocaleUtils.tr("redlining.pick"), icon: "nodetool", data: {action: "Pick", geomType: null, text: ""}},
-            toolEnabled("Transform") ? {key: "Transform", tooltip: LocaleUtils.tr("redlining.transform"), icon: "transformtool", data: {action: "Transform", geomType: null, text: ""}} : null,
+            {key: "Transform", tooltip: LocaleUtils.tr("redlining.transform"), icon: "transformtool", data: {action: "Transform", geomType: null, text: ""}},
             {key: "Delete", tooltip: LocaleUtils.tr("redlining.delete"), icon: "trash", data: {action: "Delete", geomType: null}, disabled: !this.props.redlining.selectedFeature}
-        ].filter(Boolean);
-        const extraButtons = toolEnabled("NumericInput") ? [
+        ];
+        const extraButtons = [
             {key: "NumericInput", tooltip: LocaleUtils.tr("redlining.numericinput"), icon: "numericinput"}
-        ] : [];
+        ];
         for (const plugin of Object.values(this.props.plugins || {})) {
-            if (toolEnabled(plugin.cfg.key)) {
-                editButtons.push({
-                    ...plugin.cfg,
-                    tooltip: plugin.cfg.tooltip ? LocaleUtils.tr(plugin.cfg.tooltip) : undefined
-                });
-            }
+            editButtons.push({
+                ...plugin.cfg,
+                tooltip: plugin.cfg.tooltip ? LocaleUtils.tr(plugin.cfg.tooltip) : undefined
+            });
         }
         let vectorLayers = this.props.layers.filter(layer => layer.type === "vector" && layer.role === LayerRole.USERLAYER && !layer.readonly);
         // Ensure list always contains at least a "Redlining" layer
         if (vectorLayers.length === 0) {
             vectorLayers = [{id: 'redlining', title: LocaleUtils.tr('redlining.layertitle')}, ...vectorLayers];
         }
-        const haveLayer = (this.props.layers.find(l => l.id === this.props.redlining.layer)?.features?.length || 0) > 0;
+        const haveLayer = this.props.layers.find(l => l.id === this.props.redlining.layer) !== undefined;
 
         const activePlugin = Object.values(this.props.plugins || {}).find(plugin => plugin.cfg.key === this.props.redlining.action);
         const controls = activePlugin ? (<activePlugin.controls />) : this.renderStandardControls();
@@ -225,15 +188,13 @@ class Redlining extends React.Component {
                         <div>&nbsp;</div>
                         <ButtonBar active={this.props.redlining.numericInput ? "NumericInput" : null} buttons={extraButtons} onClick={() => this.updateRedliningState({numericInput: !this.props.redlining.numericInput})} />
                     </div>
-                    {toolEnabled("Export") ? (
-                        <div className="redlining-group">
-                            <div>&nbsp;</div>
-                            <MenuButton className="redlining-export-menu" disabled={!haveLayer} menuIcon="export" onActivate={this.export} tooltip={LocaleUtils.tr("redlining.export")}>
-                                <div className="redlining-export-menu-entry" key="GeoJSON" value="geojson">GeoJSON</div>
-                                <div className="redlining-export-menu-entry" key="KML" value="kml">KML</div>
-                            </MenuButton>
-                        </div>
-                    ) : null}
+                    <div className="redlining-group">
+                        <div>&nbsp;</div>
+                        <MenuButton className="redlining-export-menu" disabled={!haveLayer} menuIcon="export" onActivate={this.export}>
+                            <div className="redlining-export-menu-entry" key="GeoJSON" value="geojson">GeoJSON</div>
+                            <div className="redlining-export-menu-entry" key="KML" value="kml">KML</div>
+                        </MenuButton>
+                    </div>
                 </div>
                 {controls}
             </div>
