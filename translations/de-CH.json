@@ -16,7 +16,6 @@
         "Editing": "Editieren",
         "Help": "Hilfe",
         "LayerTree": "Ebenen und Legende",
-        "LayerTree3D": "Ebenen",
         "MapExport": "Karte exportieren",
         "MapFilter": "Kartenfilter",
         "Print": "Drucken",
@@ -248,10 +247,6 @@
       "visiblefilter": "Unsichtbare Ebenen filtern",
       "zoomtolayer": "Auf den Layer zoomen"
     },
-    "layertree3d": {
-      "layers": "Ebenen",
-      "objects": "Objekte"
-    },
     "linkfeatureform": {
       "cancel": "Abbrechen",
       "close": "Schliessen",
@@ -388,7 +383,6 @@
       "draw": "Zeichnen",
       "edit": "Bearbeiten",
       "ellipse": "Ellipse",
-      "export": "Exportieren",
       "freehand": "Freihand",
       "label": "Beschriftung",
       "layer": "Ebene",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "Layer hinzufügen",
       "addlayerstotheme": "Ebenen der Karte hinzufügen",
-      "addselectedlayers": "Selektierte Ebenen hinzufügen",
-      "existinglayers": "Folgende Ebenen sind bereits vorhanden"
+      "addselectedlayers": "Selektierte Ebenen hinzufügen"
     },
     "themeswitcher": {
       "addlayerstotheme": "Ebenen der Karte hinzufügen",

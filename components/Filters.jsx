@@ -56,10 +56,12 @@ class Filters extends React.Component
   };
 
   handleChange = (name, value) => {
+    console.log("layer",name, value, this.props.options.drawingOrder[1])
     this.setState(
       {
         [name]: value,
-        layerName: this.extractLayerName(this.props?.options?.id), // Only set when a filter value is updated
+        layerName: this.props.options.drawingOrder[1]
+        // layerName: this.extractLayerName(this.props?.options?.id), // Only set when a filter value is updated
       },
       () => {
         this.props.updateFilters(this.state);
@@ -132,7 +134,7 @@ class Filters extends React.Component
 
 
                 {/* Type Dropdown */}
-                <Form.Item label="Vessel Type">
+                {/* <Form.Item label="Vessel Type">
                 <Select
                     placeholder="Select Type"
                     value={this.state.type}
@@ -143,7 +145,7 @@ class Filters extends React.Component
                     <Option value="Fishing">Fishing</Option>
                     <Option value="Military">Military</Option>
                 </Select>
-                </Form.Item>
+                </Form.Item> */}
 
                 {/* Buttons */}
                 <Form.Item>

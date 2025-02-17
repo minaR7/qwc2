@@ -16,7 +16,6 @@
         "Editing": "Editointi",
         "Help": "Apua",
         "LayerTree": "Karttatasot ja selite",
-        "LayerTree3D": "",
         "MapExport": "Vienti kartta",
         "MapFilter": "",
         "Print": "Tulosta",
@@ -248,10 +247,6 @@
       "visiblefilter": "Suodata näkymättömät tasot",
       "zoomtolayer": "Zoomaa tasolle"
     },
-    "layertree3d": {
-      "layers": "",
-      "objects": ""
-    },
     "linkfeatureform": {
       "cancel": "",
       "close": "",
@@ -388,7 +383,6 @@
       "draw": "Piirrä",
       "edit": "Editoi",
       "ellipse": "",
-      "export": "",
       "freehand": "Vapaa piirto",
       "label": "Selite",
       "layer": "Taso",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "Lisää taso",
       "addlayerstotheme": "Lisää tasoja nykyiseen karttaan",
-      "addselectedlayers": "Lisää valitut tasot",
-      "existinglayers": ""
+      "addselectedlayers": "Lisää valitut tasot"
     },
     "themeswitcher": {
       "addlayerstotheme": "Lisää tasoja nykyiseen karttaan",

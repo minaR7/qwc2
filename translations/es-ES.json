@@ -16,7 +16,6 @@
         "Editing": "Edición",
         "Help": "Ayuda",
         "LayerTree": "Capas & Leyenda",
-        "LayerTree3D": "",
         "MapExport": "Exportar mapa",
         "MapFilter": "",
         "Print": "Imprimir",
@@ -248,10 +247,6 @@
       "visiblefilter": "Filtrar capas no visibles",
       "zoomtolayer": "Zoom a la capa"
     },
-    "layertree3d": {
-      "layers": "",
-      "objects": ""
-    },
     "linkfeatureform": {
       "cancel": "Cancelar",
       "close": "Cerrar",
@@ -388,7 +383,6 @@
       "draw": "Dibujar",
       "edit": "Editar",
       "ellipse": "Elipse",
-      "export": "",
       "freehand": "Dibujo a mano alzada",
       "label": "Etiqueta",
       "layer": "Capa",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "Agregar capa",
       "addlayerstotheme": "Agregar capas al mapa actual",
-      "addselectedlayers": "Agregar capa(s) seleccionada(s)",
-      "existinglayers": ""
+      "addselectedlayers": "Agregar capa(s) seleccionada(s)"
     },
     "themeswitcher": {
       "addlayerstotheme": "Agregar capas al mapa actual",

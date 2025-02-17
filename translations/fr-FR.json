@@ -16,7 +16,6 @@
         "Editing": "Editer",
         "Help": "Aide",
         "LayerTree": "Couches",
-        "LayerTree3D": "Couches",
         "MapExport": "Exporter la carte",
         "MapFilter": "Filtrer la carte",
         "Print": "Imprimer",
@@ -248,10 +247,6 @@
       "visiblefilter": "Filtrer couches invisibles",
       "zoomtolayer": "Zoomer sur la couche"
     },
-    "layertree3d": {
-      "layers": "Couches",
-      "objects": "Objets"
-    },
     "linkfeatureform": {
       "cancel": "Annuler",
       "close": "Fermer",
@@ -388,7 +383,6 @@
       "draw": "Dessiner",
       "edit": "Editer",
       "ellipse": "Ellipse",
-      "export": "Exporter",
       "freehand": "Dessin à main libre",
       "label": "Texte",
       "layer": "Couche",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "Ajouter la couche",
       "addlayerstotheme": "Ajouter des couches à la carte",
-      "addselectedlayers": "Ajouter les couches sélectionnées",
-      "existinglayers": "Les couches suivantes existent déjà dans la carte"
+      "addselectedlayers": "Ajouter les couches sélectionnées"
     },
     "themeswitcher": {
       "addlayerstotheme": "Ajouter des couches à la carte",

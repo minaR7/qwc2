@@ -16,7 +16,6 @@
         "Editing": "Szerkesztés",
         "Help": "Segítség",
         "LayerTree": "Fóliák és jelmagyarázat",
-        "LayerTree3D": "",
         "MapExport": "Export térkép",
         "MapFilter": "",
         "Print": "Nyomtatás",
@@ -248,10 +247,6 @@
       "visiblefilter": "",
       "zoomtolayer": ""
     },
-    "layertree3d": {
-      "layers": "",
-      "objects": ""
-    },
     "linkfeatureform": {
       "cancel": "",
       "close": "",
@@ -388,7 +383,6 @@
       "draw": "",
       "edit": "",
       "ellipse": "",
-      "export": "",
       "freehand": "",
       "label": "Címke",
       "layer": "",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "",
       "addlayerstotheme": "",
-      "addselectedlayers": "",
-      "existinglayers": ""
+      "addselectedlayers": ""
     },
     "themeswitcher": {
       "addlayerstotheme": "",

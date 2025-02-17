@@ -16,7 +16,6 @@
         "Editing": "Rediger",
         "Help": "Hjelp",
         "LayerTree": "Lag & tegnforklaring",
-        "LayerTree3D": "",
         "MapExport": "Eksport kart",
         "MapFilter": "",
         "Print": "Skriv ut",
@@ -248,10 +247,6 @@
       "visiblefilter": "Filtrer usynlige lag",
       "zoomtolayer": "Zoom til lag"
     },
-    "layertree3d": {
-      "layers": "",
-      "objects": ""
-    },
     "linkfeatureform": {
       "cancel": "",
       "close": "",
@@ -388,7 +383,6 @@
       "draw": "Tegn",
       "edit": "Rediger",
       "ellipse": "",
-      "export": "",
       "freehand": "Frihånd",
       "label": "Etikett",
       "layer": "Lag",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "",
       "addlayerstotheme": "",
-      "addselectedlayers": "",
-      "existinglayers": ""
+      "addselectedlayers": ""
     },
     "themeswitcher": {
       "addlayerstotheme": "",

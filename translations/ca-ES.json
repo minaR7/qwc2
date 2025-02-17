@@ -16,7 +16,6 @@
         "Editing": "Edició",
         "Help": "Ajuda",
         "LayerTree": "Capes i Llegenda",
-        "LayerTree3D": "",
         "MapExport": "Exportar mapa",
         "MapFilter": "",
         "Print": "Imprimir",
@@ -248,10 +247,6 @@
       "visiblefilter": "Filtrar capes no visibles",
       "zoomtolayer": "Zoom a la capa"
     },
-    "layertree3d": {
-      "layers": "",
-      "objects": ""
-    },
     "linkfeatureform": {
       "cancel": "Cancel·lar",
       "close": "Tancar",
@@ -388,7 +383,6 @@
       "draw": "Dibuixar",
       "edit": "Editar",
       "ellipse": "El·lipse",
-      "export": "",
       "freehand": "Dibuix a ma alçada",
       "label": "Etiqueta",
       "layer": "Capa",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "Afegir capa",
       "addlayerstotheme": "Afegir capa al mapa actual",
-      "addselectedlayers": "Afegir capa(s) seleccionada(s)",
-      "existinglayers": ""
+      "addselectedlayers": "Afegir capa(s) seleccionada(s)"
     },
     "themeswitcher": {
       "addlayerstotheme": "Afegir capes al mapa actual",

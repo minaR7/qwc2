@@ -157,9 +157,9 @@ class BottomBar extends React.Component {
                 {coordinates}
                 {scales}
                 <span className="bottombar-spacer" />
-                <span className="bottombar-links">
+                {/* <span className="bottombar-links">
                     {bottomLinks}
-                </span>
+                </span> */}
             </div>
         );
     }

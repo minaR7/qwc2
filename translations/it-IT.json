@@ -16,7 +16,6 @@
         "Editing": "Strumenti di modifica",
         "Help": "Aiuto",
         "LayerTree": "Livelli",
-        "LayerTree3D": "Livelli",
         "MapExport": "Esporta mappa",
         "MapFilter": "Filta mappa",
         "Print": "Stampa",
@@ -248,10 +247,6 @@
       "visiblefilter": "Filtra livelli non visibili",
       "zoomtolayer": "Zoom a tutto il livello"
     },
-    "layertree3d": {
-      "layers": "Livelli",
-      "objects": "Oggetti"
-    },
     "linkfeatureform": {
       "cancel": "Annulla",
       "close": "Chiudi",
@@ -388,7 +383,6 @@
       "draw": "Disegna",
       "edit": "Modifica",
       "ellipse": "Ellisse",
-      "export": "Esporta",
       "freehand": "Mano libera",
       "label": "Ettichetta",
       "layer": "Layer",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "Aggiungi layer",
       "addlayerstotheme": "Aggiungi layer alla mappa corrente",
-      "addselectedlayers": "Aggiungi i layer selezionati",
-      "existinglayers": "I seguenti layer esistono già nella mappa"
+      "addselectedlayers": "Aggiungi i layer selezionati"
     },
     "themeswitcher": {
       "addlayerstotheme": "Aggiungi layer alla mappa corrente",

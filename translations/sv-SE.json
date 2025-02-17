@@ -16,7 +16,6 @@
         "Editing": "Redigera",
         "Help": "Hjälp",
         "LayerTree": "Lager & teckenförklaring",
-        "LayerTree3D": "",
         "MapExport": "Exportera karta",
         "MapFilter": "",
         "Print": "Skriv ut",
@@ -248,10 +247,6 @@
       "visiblefilter": "",
       "zoomtolayer": ""
     },
-    "layertree3d": {
-      "layers": "",
-      "objects": ""
-    },
     "linkfeatureform": {
       "cancel": "",
       "close": "",
@@ -388,7 +383,6 @@
       "draw": "Rita",
       "edit": "Redigera",
       "ellipse": "",
-      "export": "",
       "freehand": "",
       "label": "Etikett",
       "layer": "Lager",
@@ -517,8 +511,7 @@
     "themelayerslist": {
       "addlayer": "",
       "addlayerstotheme": "",
-      "addselectedlayers": "",
-      "existinglayers": ""
+      "addselectedlayers": ""
     },
     "themeswitcher": {
       "addlayerstotheme": "",
