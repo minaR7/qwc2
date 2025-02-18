@@ -129,6 +129,12 @@ class Filters extends React.Component
                         onChange={(e) => this.handleChange("vessel_name", e.target.value)}
                     />
                     </Form.Item>
+
+                    <Form.Item>
+                      <Button onClick={this.handleClear} type="default">
+                          Clear Filters
+                      </Button>
+                    </Form.Item>
                   </>
                 )}
 
@@ -148,11 +154,7 @@ class Filters extends React.Component
                 </Form.Item> */}
 
                 {/* Buttons */}
-                <Form.Item>
-                <Button onClick={this.handleClear} type="default">
-                    Clear Filters
-                </Button>
-                </Form.Item>
+
             </Form>
         </div>
     );
