@@ -72,7 +72,7 @@ function wmsImageLoadFunction(image, src) {
 }
 
 function wmsToOpenlayersOptions(options) {
-    console.log(options)
+    console.log("options", options)
     // Get filter state from Redux store
     const state = StandardStore.get().getState();
     console.log(state.filter)
@@ -83,19 +83,25 @@ function wmsToOpenlayersOptions(options) {
     // console.log("new technique for filter:", urlParams, urlFilter)
 
     
-    const { layerName, flag, vessel_name, type, quantity, operator } = state.filter;
+    const { layerName, flag, vessel_name, type, quantity, operator, ssr_country, ssr_boat_name, ssr_own_ship, ssr_no_of_crew, ssr_boat_regno, name, vessel_id, vessel_ssvid, vessel_flag, } = state.filter;
     // const { layerName, flag, vessel_name, type, quantity, operator } = options.params.FILTER
     const conditions = [];
     if (flag && flag!=="all") conditions.push(`"flag" = '${flag}'`);
     if (vessel_name && vessel_name!=="") conditions.push(`"vessel_name" = '${vessel_name}'`);
-    if (type) conditions.push(`"type" = '${type}'`);
-    if (quantity) conditions.push(`"quantity" ${operator} '${quantity}'`);
-    console.log(conditions)
+    if (name && name!=="") conditions.push(`"name" = '${name}'`);
+    if (layerName!=="density_map" && type) conditions.push(`"type" = '${type}'`);
+    if (quantity) conditions.push(`"quantity" ${operator} ${quantity}`);
+    if (ssr_country && ssr_country!=="all") conditions.push(`"ssr_country" = '${ssr_country}'`);
+    if (ssr_boat_name && ssr_boat_name!=="") conditions.push(`"ssr_boat_name" = '${ssr_boat_name}'`);
+    if (ssr_own_ship && ssr_own_ship!=="") conditions.push(`"ssr_own_ship" = '${ssr_own_ship}'`);
+    if (ssr_boat_regno && ssr_boat_regno!=="") conditions.push(`"ssr_boat_regno" = '${ssr_boat_regno}'`);
+    if (ssr_no_of_crew) conditions.push(`"ssr_no_of_crew" ${operator} '${ssr_no_of_crew}'`);
+    console.log("filter condition",conditions)
 
-    const filterValue = conditions.length > 0 ? `${layerName}: ${conditions.join(" AND ")}` : "";
+    const filterValue = conditions.length > 0 ? `${layerName}: ${conditions.join(" OR ")}` : "";
     if(state?.filter && options?.params)
     options.params.FILTER = filterValue;
-console.log("FILTER", options.params.FILTER,filterValue)
+    console.log("FILTER", options.params.FILTER,"\n",filterValue)
     return {
         ...urlParams,
         LAYERS: options.name,

@@ -6,9 +6,19 @@ const initialState = {
     flag: "",
     type: "",
     vessel_name: "",
+    name: "",
     quantity: "",
     quantityOperator: "=",
     layerName: "",
+    ssr_country: "",
+    ssr_boat_name: "",
+    ssr_own_ship: "",	
+    ssr_no_of_crew: "",
+    ssr_boat_regno: "",
+    vessel_id: "",
+    vessel_ssvid: "",
+    vessel_flag: "",
+
 };
 
 const filterReducer = (state = initialState, action) => {
