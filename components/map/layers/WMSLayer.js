@@ -96,9 +96,18 @@ function wmsToOpenlayersOptions(options) {
     if (ssr_own_ship && ssr_own_ship!=="") conditions.push(`"ssr_own_ship" = '${ssr_own_ship}'`);
     if (ssr_boat_regno && ssr_boat_regno!=="") conditions.push(`"ssr_boat_regno" = '${ssr_boat_regno}'`);
     if (ssr_no_of_crew) conditions.push(`"ssr_no_of_crew" ${operator} '${ssr_no_of_crew}'`);
+    if (vessel_id && vessel_id!=="") conditions.push(`"vessel_id" = '${vessel_id}'`);
+    if (vessel_ssvid && vessel_ssvid!=="") conditions.push(`"vessel_ssvid" = '${vessel_ssvid}'`);
+    if (vessel_flag && vessel_flag!=="all") conditions.push(`"vessel_flag" = '${vessel_flag}'`);
     console.log("filter condition",conditions)
 
-    const filterValue = conditions.length > 0 ? `${layerName}: ${conditions.join(" OR ")}` : "";
+    // const filterValue = conditions.length > 0 ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" ? layerName?.map(name => `${name}: ${conditions.join(" OR ")}`).join(" , ") : `${layerName}: ${conditions.join(" OR ")}` : "";
+
+    const filterValue = conditions.length > 0 
+  ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" 
+    ? `${layerName?.map(name => `${name}:${conditions.join(" OR ")}`).join(";")}`
+    : `${layerName}:${conditions.join(" OR ")}`
+  : "";
     if(state?.filter && options?.params)
     options.params.FILTER = filterValue;
     console.log("FILTER", options.params.FILTER,"\n",filterValue)

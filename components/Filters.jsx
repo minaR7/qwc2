@@ -78,7 +78,7 @@ class Filters extends React.Component
         updatedLayerName = this.props.options.drawingOrder[2]; // Remove the first element
     }
     else if (this.props?.options?.id === "all_vessels_fishing_density_areas_in_pak.qgz") {
-        updatedLayerName = ['eez_density','ecs_density' ]; // Remove the first element
+        updatedLayerName = ['eez_density','ecs_density']; // Remove the first element
     } 
     else {
       // If not "Patrol", retain the layerName as a single value
