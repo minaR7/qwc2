@@ -142,7 +142,7 @@ export default {
             console.warn("Tiled WMS requested without specifying bounding box, falling back to non-tiled.");
         }
         if (!queryParameters.TILED || !options.bbox) {
-            console.warn("Tiled WMS request.", options, map);
+            // console.warn("Tiled WMS request.", options, map);
             const layer = new ol.layer.Image({
                 minResolution: options.minResolution,
                 maxResolution: options.maxResolution,

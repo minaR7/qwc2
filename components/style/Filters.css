@@ -4,7 +4,7 @@ div.Filter-Container {
     transition: background-color 0.25s;
     outline: none;
     overflow: hidden;
-    margin-left: 5rem;
+    /* margin-left: 5rem; */
     /* display: flex; */
         flex: 1 1 auto;
         display: inline-flex;  
