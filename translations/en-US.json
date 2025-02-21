@@ -44,7 +44,7 @@
         "Tools": "Map Tools",
         "TimeManager": "Time Manager"
       },
-      "menulabel": "Map & Tools"
+      "menulabel": "Map Tools"
     },
     "attribtable": {
       "addfeature": "Add feature",
