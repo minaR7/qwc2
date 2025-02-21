@@ -52,7 +52,8 @@
 }
 
 #TopBar div.AppMenu .appmenu-button {
-    width: 20em;
+    /* width: 20em; */
+    width: 18em;
     display: inline-block;
 }
 

@@ -182,6 +182,23 @@ class TopBar extends React.Component {
                 onSwipedUp={() => this.props.toggleFullscreen(true)}>
                 <div className={classes} id="TopBar" ref={this.storeHeight} style={style}>
                     {/* {logoEl} */}
+                    <div className="center-span">
+                        {console.log(this)}
+                        {/* {this.props?.currentTheme?.title === "Contraband Drug Confiscation" ? (<><button onClick={this.handleUpdate}>Filter by Narco Type</button ></>) : null} */}
+                        {/* {this.props.components.Search ? (
+                            <this.props.components.Search searchOptions={searchOptions}/>
+                        ) : null} */}
+                        {/* {this.props.components.Toolbar ? (
+                            <this.props.components.Toolbar
+                                openExternalUrl={this.openUrl}
+                                toolbarItems={this.state.allowedToolbarItems}
+                                toolbarItemsShortcutPrefix={this.props.toolbarItemsShortcutPrefix} />
+                        ) : null} */}
+                    </div>
+                    {/* && this.props?.currentTheme?.title === "Contraband Drug Confiscation" */}
+                    {this.props.components.Filters  ? (
+                        <this.props.components.Filters options={this.props.currentTheme} />
+                    ) : null}
                     {this.props.components.AppMenu && !this.props.appMenuHidden ? (
                         <this.props.components.AppMenu
                             appMenuClearsTask={this.props.appMenuClearsTask}
@@ -193,23 +210,6 @@ class TopBar extends React.Component {
                             openExternalUrl={this.openUrl}
                             showFilterField={this.props.appMenuFilterField}
                             showOnStartup={showOnStartup} />
-                    ) : null}
-                    <div className="center-span">
-                        {console.log(this)}
-                        {/* {this.props?.currentTheme?.title === "Contraband Drug Confiscation" ? (<><button onClick={this.handleUpdate}>Filter by Narco Type</button ></>) : null} */}
-                        {/* {this.props.components.Search ? (
-                            <this.props.components.Search searchOptions={searchOptions}/>
-                        ) : null} */}
-                        {this.props.components.Toolbar ? (
-                            <this.props.components.Toolbar
-                                openExternalUrl={this.openUrl}
-                                toolbarItems={this.state.allowedToolbarItems}
-                                toolbarItemsShortcutPrefix={this.props.toolbarItemsShortcutPrefix} />
-                        ) : null}
-                    </div>
-                    {/* && this.props?.currentTheme?.title === "Contraband Drug Confiscation" */}
-                    {this.props.components.Filters  ? (
-                        <this.props.components.Filters options={this.props.currentTheme} />
                     ) : null}
                     {this.props.components.FullscreenSwitcher ? (
                         <this.props.components.FullscreenSwitcher />
