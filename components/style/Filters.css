@@ -61,12 +61,32 @@ form{
     border-color: #4096ff !important; /* input search field: Change to the hover color */
 }
 
+.ant-form .ant-form-item .ant-row .ant-col .ant-form-item-control-input .ant-form-item-control-input-content .ant-picker-outlined .ant-picker-input input{
+    border: none;
+    height: 2em;
+    padding: 0.2em;
+}
+
+.ant-form .ant-form-item .ant-row .ant-col .ant-form-item-control-input .ant-form-item-control-input-content .ant-input-group-compact
+{
+    width: 80%;
+}
+
+.date-picker-custom{
+    padding: 0.15em 0.4em;
+    /* width: 3em; */
+    width: 200px;
+}
+
+.ant-btn {
+    padding: 16px 6px;
+}
+
 div.Filter-Container.appmenu-visible {
     background-color: var(--app-submenu-bg-color-hover);
     color: var(--app-submenu-text-color-hover);
     overflow: visible;
 }
-
 
 div.Filter-Container .appmenu-label {
     font-weight: bold;

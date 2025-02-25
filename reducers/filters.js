@@ -7,6 +7,8 @@ const initialState = {
     type: "",
     vessel_name: "",
     name: "",
+    date: "",
+    dtg: "",
     quantity: "",
     quantityOperator: "=",
     layerName: "",
@@ -15,9 +17,14 @@ const initialState = {
     ssr_own_ship: "",	
     ssr_no_of_crew: "",
     ssr_boat_regno: "",
+    ssr_dtg: "",
     vessel_id: "",
     vessel_ssvid: "",
     vessel_flag: "",
+    ais_type_summary: "",
+    timestamp: "",
+    destination: "",
+    current_port: "",
 
 };
 

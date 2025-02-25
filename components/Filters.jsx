@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Select, Input, Button, Form } from "antd";
+import { Select, Input, Button, Form, DatePicker } from "antd";
 import { updateFilters, clearFilters } from "../actions/filters";
 
+import PropTypes from 'prop-types';
 import "./style/Filters.css";
 
 const { Option } = Select;
-import PropTypes from 'prop-types';
+const { RangePicker } = DatePicker;
 
 class Filters extends React.Component
 // class  extends Component 
@@ -23,7 +24,9 @@ class Filters extends React.Component
       quantity: "",
       operator: "=",
       vessel_name: "",
+      dtg: "",
       name: "",
+      date: "",
       ssr_country: "all",
       ssr_boat_name: "",
       ssr_own_ship: "",	
@@ -33,12 +36,19 @@ class Filters extends React.Component
       vessel_id: "",
       vessel_ssvid: "",
       vessel_flag: "all",
+      ssr_dtg: "",
+      ais_type_summary: "",
+      timestamp: "",
+      destination: "",
+      current_port: "",
     };
   }
 
   componentDidMount() {
     console.log("Filters component mounted");
     console.log(this)
+    let is_filter = 0; 
+    // console.log(this.is_filter)
     // Fetch any required initial data or apply stored filters if needed
   }
 
@@ -77,11 +87,14 @@ class Filters extends React.Component
     if (this.props?.options?.id === "pak_fishing_density_areas.qgz") {
         updatedLayerName = this.props.options.drawingOrder[2]; // Remove the first element
     }
+    else if (this.props?.options?.id === "indian_dhows_distance_from_pakcoast_final.qgz") {
+        updatedLayerName = ['Style_1','Style_2']; // Remove the first element
+    }
     else if (this.props?.options?.id === "all_vessels_fishing_density_areas_in_pak.qgz") {
-        updatedLayerName = ['eez_density','ecs_density']; // Remove the first element
-    } 
+      updatedLayerName = ['eez_density','ecs_density']; // Remove the first element
+    }
     else {
-      // If not "Patrol", retain the layerName as a single value
+      // retain the layerName as a single value
       updatedLayerName = [this.props.options.drawingOrder[1]];
     }
   
@@ -104,19 +117,27 @@ class Filters extends React.Component
       quantity: "",
       operator: "=",
       vessel_name: "",
+      dtg: "",
       name: "",
+      date: "",
       layerName: "",
       ssr_country: "all",
       ssr_boat_name: "",
       ssr_own_ship: "",	
       ssr_no_of_crew: "",
       ssr_boat_regno: "",
+      ssr_dtg: "",
       vessel_id: "",
       vessel_ssvid: "",
       vessel_flag: "all",
+      ais_type_summary: "",
+      timestamp: "",
+      destination: "",
+      current_port: "",
     });
     this.props.clearFilters();
   };
+
   render() {
     return (
         <div className="Filter-Container">
@@ -166,7 +187,17 @@ class Filters extends React.Component
                         onChange={(e) => this.handleChange("vessel_name", e.target.value)}
                     />
                     </Form.Item>
-
+                    {/* <Form.Item label="Select Date">
+                      <DatePicker onChange={(value) => this.handleChange("dtg", value)} format={'DD/MM/YYYY'} 
+                        value={this.state.dtg} className="date-picker-custom"/>
+                    </Form.Item> */}
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("dtg", value)}
+                        value={this.state.dtg}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
                     <Form.Item>
                       <Button onClick={this.handleClear} type="default">
                           Clear Filters
@@ -191,46 +222,54 @@ class Filters extends React.Component
                     </Form.Item>
                       {/* Quantity + Operator */}
                     <Form.Item label="Quantity">
-                    <Input.Group compact>
-                        <Select
-                        value={this.state.operator}
-                        onChange={(value) => this.handleChange("operator", value)}
-                        style={{ width: "30%" }}
-                        >
-                        <Option value="=">=</Option>
-                        <Option value=">">&gt;</Option>
-                        <Option value="<">&lt;</Option>
-                        </Select>
-                        <Input
-                        type="number"
-                        placeholder="No of Crew"
-                        value={this.state.ssr_no_of_crew}
-                        onChange={(e) => this.handleChange("ssr_no_of_crew", e.target.value)}
-                        style={{ width: "70%" }}
-                        />
-                    </Input.Group>
+                      <Input.Group compact>
+                          <Select
+                          value={this.state.operator}
+                          onChange={(value) => this.handleChange("operator", value)}
+                          style={{ width: "30%" }}
+                          >
+                          <Option value="=">=</Option>
+                          <Option value=">">&gt;</Option>
+                          <Option value="<">&lt;</Option>
+                          </Select>
+                          <Input
+                          type="number"
+                          placeholder="No of Crew"
+                          value={this.state.ssr_no_of_crew}
+                          onChange={(e) => this.handleChange("ssr_no_of_crew", e.target.value)}
+                          style={{ width: "70%" }}
+                          />
+                      </Input.Group>
                     </Form.Item>
                     {/* Vessel Name Search */}
                     <Form.Item label="Search Boat">
-                    <Input
-                        placeholder="Enter Boat Name"
-                        value={this.state.ssr_boat_name}
-                        onChange={(e) => this.handleChange("ssr_boat_name", e.target.value)}
-                    />
+                      <Input
+                          placeholder="Enter Boat Name"
+                          value={this.state.ssr_boat_name}
+                          onChange={(e) => this.handleChange("ssr_boat_name", e.target.value)}
+                      />
                     </Form.Item>
                     <Form.Item label="Search Unit">
-                    <Input
-                        placeholder="Enter Unit Name"
-                        value={this.state.ssr_own_ship}
-                        onChange={(e) => this.handleChange("ssr_own_ship", e.target.value)}
-                    />
+                      <Input
+                          placeholder="Enter Unit Name"
+                          value={this.state.ssr_own_ship}
+                          onChange={(e) => this.handleChange("ssr_own_ship", e.target.value)}
+                      />
                     </Form.Item>
                     <Form.Item label="Search Reg No">
-                    <Input
-                        placeholder="Enter Reg No"
-                        value={this.state.ssr_boat_regno}
-                        onChange={(e) => this.handleChange("ssr_boat_regno", e.target.value)}
-                    />
+                      <Input
+                          placeholder="Enter Reg No"
+                          value={this.state.ssr_boat_regno}
+                          onChange={(e) => this.handleChange("ssr_boat_regno", e.target.value)}
+                      />
+                    </Form.Item>
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("ssr_dtg", value)}
+                        value={this.state.ssr_dtg}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                      {/* <DatePicker onChange={(value) => this.handleChange("ssr_dtg", value)} format={'DD/MM/YYYY'} value={this.state.ssr_dtg} className="date-picker-custom"/> */}
                     </Form.Item>
                     <Form.Item>
                       <Button onClick={this.handleClear} type="default">
@@ -238,35 +277,182 @@ class Filters extends React.Component
                       </Button>
                     </Form.Item>
                   </>
-                )}
+                )}         
+                {
+                this.props?.options?.id === "ais_merchant_vessels_heatmap.qgz" && (
+                  <>
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("timestamp", value)}
+                        value={this.state.timestamp}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
+                    {/* <Form.Item label="Select Date">
+                      <DatePicker onChange={(value) => this.handleChange("date", value)} format={'DD/MM/YYYY'} className="date-picker-custom"/>
+                    </Form.Item> */}
+                    {/*Flag Dropdown */ }
+                    <Form.Item label="Flag">
+                        <Select
+                            // showSearch
+                            // optionFilterProp="children"
+                            placeholder="Select Flag"
+                            value={this.state.flag}
+                            onChange={(value) => this.handleChange("flag", value)}
+                            style={{width: "100px"}}
+                        >
+                          <Option value="all">All</Option>
+                          <Option value="GB">United Kingdom</Option>
+                          <Option value="MH">Marshall Islands</Option>
+                          <Option value="GR">Greece</Option>
+                          <Option value="PA">Panama</Option>
+                          <Option value="IN">India</Option>
+                          <Option value="SG">Singapore</Option>
+                          <Option value="MT">Malta</Option>
+                          <Option value="KN">Saint Kitts and Nevis</Option>
+                          <Option value="PK">Pakistan</Option>
+                          <Option value="KR">South Korea</Option>
+                          <Option value="NU">Niue</Option>
+                          <Option value="PT">Portugal</Option>
+                          <Option value="LR">Liberia</Option>
+                          <Option value="HK">Hong Kong</Option>
+                          <Option value="TR">Turkey</Option>
+                          <Option value="CN">China</Option>
+                          <Option value="VC">Saint Vincent and the Grenadines</Option>
+                          <Option value="TZ">Tanzania</Option>
+                          <Option value="STATeless">Stateless</Option>
+                          <Option value="CK">Cook Islands</Option>
+                          <Option value="OM">Oman</Option>
+                          <Option value="JP">Japan</Option>
+                          <Option value="DK">Denmark</Option>
+                          <Option value="BS">Bahamas</Option>
+                          <Option value="IR">Iran</Option>
+                          <Option value="FR">France</Option>
+                          <Option value="MN">Mongolia</Option>
+                          <Option value="NR">Nauru</Option>
+                          <Option value="PW">Palau</Option>
+                          <Option value="GA">Gabon</Option>
+                          <Option value="KM">Comoros</Option>
+                          <Option value="CY">Cyprus</Option>
+                          <Option value="GW">Guinea-Bissau</Option>
+                          <Option value="NO">Norway</Option>
+                          <Option value="AG">Antigua and Barbuda</Option>
+                          <Option value="BZ">Belize</Option>
+                          <Option value="RU">Russia</Option>
+                          <Option value="AE">United Arab Emirates</Option>
+                          <Option value="VN">Vietnam</Option>
+                          <Option value="SA">Saudi Arabia</Option>
+                          <Option value="BE">Belgium</Option>
+                          <Option value="BD">Bangladesh</Option>
+                          <Option value="CW">Curaçao</Option>
+                          <Option value="MY">Malaysia</Option>
+                          <Option value="TV">Tuvalu</Option>
+                          <Option value="ET">Ethiopia</Option>
+                          <Option value="US">United States</Option>
+                          <Option value="DE">Germany</Option>
+                          <Option value="BB">Barbados</Option>
+                          <Option value="NL">Netherlands</Option>
+                          <Option value="IT">Italy</Option>
+                          <Option value="KW">Kuwait</Option>
+                          <Option value="ID">Indonesia</Option>
+                          <Option value="CM">Cameroon</Option>
+                          <Option value="KY">Cayman Islands</Option>
+                          <Option value="PH">Philippines</Option>
+                          <Option value="LU">Luxembourg</Option>
+                          <Option value="HN">Honduras</Option>
+                          <Option value="VU">Vanuatu</Option>
+                          <Option value="GY">Guyana</Option>
+                          <Option value="TG">Togo</Option>
+                          <Option value="ES">Spain</Option>
+                        </Select>
+                      </Form.Item>
+                    {/*Type Dropdown */ }
+                    <Form.Item label="Type">
+                      <Select
+                        // showSearch
+                        placeholder="Select Type"
+                        value={this.state.ais_type_summary}
+                        onChange={(value) => this.handleChange("ais_type_summary", value)}
+                        style={{width: "100%"}}
+                      >
+                        <Option value="">All</Option>
+                        <Option value="Tanker">Tanker</Option>
+                        <Option value="Cargo">Cargo</Option>
+                        <Option value="Other">Other</Option>
+                        <Option value="Special Craft">Special Craft</Option>
+                        <Option value="Tug">Tug</Option>
+                        <Option value="UNSPECIFIED">Unspecified</Option>
+                        <Option value="Fishing">Fishing</Option>
+                        <Option value="Wing in Grnd">Wing in Ground</Option>
+                        <Option value="Unspecified">Unspecified</Option>
+                        <Option value="VTS">VTS</Option>
+                        <Option value="Search and Rescue">Search and Rescue</Option>
+                        <Option value="Pleasure Craft">Pleasure Craft</Option>
+                        <Option value="Sailing Vessel">Sailing Vessel</Option>
+                        <Option value="Navigation Aid">Navigation Aid</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button onClick={this.handleClear} type="default">
+                          Clear Filters
+                      </Button>
+                    </Form.Item>
+                  </>
+                )
+                }        
+                {
+                this.props?.options?.id === "fishingheatmap.qgz" && (
+                  <>
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("date", value)}
+                        value={this.state.date}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
+                    {/* <Form.Item label="Select Date">
+                      <DatePicker onChange={(value) => this.handleChange("date", value)} 
+                        value={this.state.date} format={'DD/MM/YYYY'} className="date-picker-custom"/>
+                    </Form.Item> */}
+                    <Form.Item>
+                      <Button onClick={this.handleClear} type="default">
+                          Clear Filters
+                      </Button>
+                    </Form.Item>
+                  </>
+                )
+                }
                 {
                 this.props?.options?.id === "pak_fishing_density_areas.qgz" && (
                   <>
-                  {/*Type Dropdown */}
-                  <Form.Item label="Type">
-                    <Select
-                        placeholder="Select Type"
-                        value={this.state.type}
-                        onChange={(value) => this.handleChange("type", value)}
-                        style={{width: "100%"}}
-                    >
-                        <Option value="">All</Option>
-                        <Option value="all">AU</Option>
-                    </Select>
-                  </Form.Item>
-                  {/* Vessel Name Search */}
-                  <Form.Item label="Search Vessel">
-                  <Input
-                      placeholder="Enter Vessel Name"
-                      value={this.state.name}
-                      onChange={(e) => this.handleChange("name", e.target.value)}
-                  />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button onClick={this.handleClear} type="default">
-                        Clear Filters
-                    </Button>
-                  </Form.Item>
+                    {/*Type Dropdown */ }
+                    <Form.Item label="Type">
+                      <Select
+                          placeholder="Select Type"
+                          value={this.state.type}
+                          onChange={(value) => this.handleChange("type", value)}
+                          style={{width: "100%"}}
+                      >
+                          <Option value="">All</Option>
+                          <Option value="all">AU</Option>
+                      </Select>
+                    </Form.Item>
+                    {/* Vessel Name Search */}
+                    {/* <Form.Item label="Search Vessel">
+                    <Input
+                        placeholder="Enter Vessel Name"
+                        value={this.state.name}
+                        onChange={(e) => this.handleChange("name", e.target.value)}
+                    />
+                    </Form.Item> */}
+                    <Form.Item label="Select Date">
+                      <DatePicker onChange={(value) => this.handleChange("date", value)} format={'DD/MM/YYYY'} value={this.state.date} className="date-picker-custom"/>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button onClick={this.handleClear} type="default">
+                          Clear Filters
+                      </Button>
+                    </Form.Item>
                   </>
                 )
                 }
@@ -274,29 +460,29 @@ class Filters extends React.Component
                 this.props?.options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" && (
                   <>
                     {/* Vessel Name Search */}
-                    <Form.Item label="Search Vessel">
+                    {/* <Form.Item label="Search Vessel">
                     <Input
                         placeholder="Enter Vessel Name"
                         value={this.state.vessel_name}
                         onChange={(e) => this.handleChange("vessel_name", e.target.value)}
                     />
-                    </Form.Item>                  
+                    </Form.Item>                   */}
                     {/* Vessel ID Search */}
-                    <Form.Item label="Search Vessel ID">
+                    {/* <Form.Item label="Search Vessel ID">
                     <Input
                         placeholder="Enter Vessel ID"
                         value={this.state.vessel_id}
                         onChange={(e) => this.handleChange("vessel_id", e.target.value)}
                     />
-                    </Form.Item>                  
+                    </Form.Item>                   */}
                     {/* Vessel SSVID Search */}
-                    <Form.Item label="Search Vessel SSVID">
+                    {/* <Form.Item label="Search Vessel SSVID">
                     <Input
                         placeholder="Enter Vessel SSVID"
                         value={this.state.vessel_ssvid}
                         onChange={(e) => this.handleChange("vessel_ssvid", e.target.value)}
                     />
-                    </Form.Item>
+                    </Form.Item> */}
                     {/* Flag/Country Dropdown */}
                     <Form.Item label="Flag">
                       <Select
@@ -320,23 +506,30 @@ class Filters extends React.Component
                   </>
                 )
                 }
+                {this.props?.options?.id === "indian_dhows_distance_from_pakcoast_final.qgz" && 
+                (
+                  <>
+                    <Form.Item label="Select Date">
+                      <DatePicker onChange={(value) => this.handleChange("date", value)} format={'DD/MM/YYYY'} value={this.state.date} className="date-picker-custom"/>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button onClick={this.handleClear} type="default">
+                          Clear Filters
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
 
-                {/* Type Dropdown */}
-                {/* <Form.Item label="Vessel Type">
-                <Select
-                    placeholder="Select Type"
-                    value={this.state.type}
-                    onChange={(value) => this.handleChange("type", value)}
-                >
-                    <Option value="">All</Option>
-                    <Option value="Cargo">Cargo</Option>
-                    <Option value="Fishing">Fishing</Option>
-                    <Option value="Military">Military</Option>
-                </Select>
-                </Form.Item> */}
-
-                {/* Buttons */}
-
+                
+                {/* reset/clear filters */}
+                {/* { 1 && ( */}
+                {/* {console.log(this.is_filter)} */}
+                  {/* <Form.Item>
+                    <Button onClick={this.handleClear} type="default">
+                        Clear Filters
+                    </Button>
+                  </Form.Item> */}
+                {/* )} */}
             </Form>
         </div>
     );

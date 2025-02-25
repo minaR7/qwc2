@@ -25,7 +25,8 @@
 }
 
 #TopBar div.center-span {
-    margin: 0 1em;
+    /* margin: 0 1em; */
+    margin: 0 0.1em;
     /* flex: 1 1 auto; */
     flex: 0 0 auto;
     display: inline-flex;
@@ -53,7 +54,7 @@
 
 #TopBar div.AppMenu .appmenu-button {
     /* width: 20em; */
-    width: 18em;
+    width: 16em;
     display: inline-block;
 }
 

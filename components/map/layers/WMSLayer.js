@@ -19,6 +19,7 @@ import ConfigUtils from '../../../utils/ConfigUtils';
 import CoordinatesUtils from '../../../utils/CoordinatesUtils';
 import MiscUtils from '../../../utils/MiscUtils';
 import {UrlParams} from '../../../utils/PermaLinkUtils';
+import dayjs from 'dayjs';
 
 function periodicWmsImageLoad(image, src, interval = 100000) { // Default interval: 5000ms
     const loadImage = () => wmsImageLoadFunction(image, src);
@@ -83,13 +84,15 @@ function wmsToOpenlayersOptions(options) {
     // console.log("new technique for filter:", urlParams, urlFilter)
 
     
-    const { layerName, flag, vessel_name, type, quantity, operator, ssr_country, ssr_boat_name, ssr_own_ship, ssr_no_of_crew, ssr_boat_regno, name, vessel_id, vessel_ssvid, vessel_flag, } = state.filter;
+    const { layerName, flag, vessel_name, type, quantity, operator, ssr_country, ssr_boat_name, ssr_own_ship, ssr_no_of_crew, ssr_boat_regno, name, date, 
+        vessel_id, vessel_ssvid, vessel_flag, dtg, ssr_dtg, ais_type_summary, timestamp } = state.filter;
     // const { layerName, flag, vessel_name, type, quantity, operator } = options.params.FILTER
     const conditions = [];
     if (flag && flag!=="all") conditions.push(`"flag" = '${flag}'`);
     if (vessel_name && vessel_name!=="") conditions.push(`"vessel_name" = '${vessel_name}'`);
     if (name && name!=="") conditions.push(`"name" = '${name}'`);
-    if (layerName!=="density_map" && type) conditions.push(`"type" = '${type}'`);
+    if (layerName!=="density_map" && type) { console.log("1 layer is", layerName) ;conditions.push(`"type" = '${type}'`);}
+    if (ais_type_summary) conditions.push(`"ais_type_summary" = '${ais_type_summary}'`);
     if (quantity) conditions.push(`"quantity" ${operator} ${quantity}`);
     if (ssr_country && ssr_country!=="all") conditions.push(`"ssr_country" = '${ssr_country}'`);
     if (ssr_boat_name && ssr_boat_name!=="") conditions.push(`"ssr_boat_name" = '${ssr_boat_name}'`);
@@ -99,6 +102,33 @@ function wmsToOpenlayersOptions(options) {
     if (vessel_id && vessel_id!=="") conditions.push(`"vessel_id" = '${vessel_id}'`);
     if (vessel_ssvid && vessel_ssvid!=="") conditions.push(`"vessel_ssvid" = '${vessel_ssvid}'`);
     if (vessel_flag && vessel_flag!=="all") conditions.push(`"vessel_flag" = '${vessel_flag}'`);
+    if (date && date!==""){
+        if(date.length===2)
+        {
+            console.log("date", date.length)
+            conditions.push(`"date" >= '${dayjs(date[0]).format("YYYY-MM-DD")}' AND "date" <= '${dayjs(date[1]).format("YYYY-MM-DD")}'`); 
+        }
+        else{
+            console.log("date", date)
+            conditions.push(`"date" = '${dayjs(date).format("YYYY-MM-DD")}'`);
+        }
+    }
+    if (dtg && dtg!==""){
+        if(dtg.length<=1)
+        conditions.push(`"dtg" = '${dayjs(dtg).format("YYYY-MM-DD")}'`); 
+        else conditions.push(`"dtg" >= '${dayjs(dtg[0]).format("YYYY-MM-DD")}' AND "dtg" <= '${dayjs(dtg[1]).format("YYYY-MM-DD")}'`); 
+    }     
+    if (timestamp && timestamp!==""){
+        if(timestamp.length<=1)
+        conditions.push(`"timestamp" = '${dayjs(timestamp).format("YYYY-MM-DD")}'`); 
+        else conditions.push(`"timestamp" >= '${dayjs(timestamp[0]).format("YYYY-MM-DD")}' AND "timestamp" <= '${dayjs(timestamp[1]).format("YYYY-MM-DD")}'`); 
+    } 
+    if (ssr_dtg && ssr_dtg!=="") {
+        const startDate = dayjs(ssr_dtg[0].format("YYYY-MM-DD"));
+        const endDate = dayjs(ssr_dtg[1].format("YYYY-MM-DD"));
+        // conditions.push(`"ssr_dtg" BETWEEN '${dayjs(ssr_dtg[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ")}' AND '${dayjs(ssr_dtg[1]).format("YYYY-MM-DDTHH:mm:ss.SSSZ")}'`);
+        conditions.push(`"ssr_dtg" >= '${startDate}' AND "ssr_dtg" <= '${endDate}'`);
+ }
     console.log("filter condition",conditions)
 
     // const filterValue = conditions.length > 0 ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" ? layerName?.map(name => `${name}: ${conditions.join(" OR ")}`).join(" , ") : `${layerName}: ${conditions.join(" OR ")}` : "";
