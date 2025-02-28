@@ -3,14 +3,14 @@ import { SET_MAP_FILTER, UPDATE_FILTERS, CLEAR_FILTERS,
 
 const initialState = {
   filterParam: null,
-    flag: "",
+    flag: "", // [narco, ]
     type: "",
-    vessel_name: "",
+    vessel_name: "", // [narco, ]
     name: "",
     date: "",
-    dtg: "",
-    quantity: "",
-    quantityOperator: "=",
+    dtg: "", // [narco, ]
+    quantity: "", // [narco, ]
+    quantityOperator: "=", // [narco, ]
     layerName: "",
     ssr_country: "",
     ssr_boat_name: "",
@@ -25,6 +25,12 @@ const initialState = {
     timestamp: "",
     destination: "",
     current_port: "",
+    begin: "",
+    end: "",
+    start: "",
+    end2: "",
+    date_all_flag_heatmap: "",
+    date_new: "",
 
 };
 

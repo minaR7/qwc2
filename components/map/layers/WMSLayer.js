@@ -85,7 +85,7 @@ function wmsToOpenlayersOptions(options) {
 
     
     const { layerName, flag, vessel_name, type, quantity, operator, ssr_country, ssr_boat_name, ssr_own_ship, ssr_no_of_crew, ssr_boat_regno, name, date, 
-        vessel_id, vessel_ssvid, vessel_flag, dtg, ssr_dtg, ais_type_summary, timestamp } = state.filter;
+        vessel_id, vessel_ssvid, vessel_flag, dtg, ssr_dtg, ais_type_summary, timestamp, begin, end, start, end2, date_all_flag_heatmap, date_new} = state.filter;
     // const { layerName, flag, vessel_name, type, quantity, operator } = options.params.FILTER
     const conditions = [];
     if (flag && flag!=="all") conditions.push(`"flag" = '${flag}'`);
@@ -108,6 +108,10 @@ function wmsToOpenlayersOptions(options) {
             console.log("date", date.length)
             conditions.push(`"date" >= '${dayjs(date[0]).format("YYYY-MM-DD")}' AND "date" <= '${dayjs(date[1]).format("YYYY-MM-DD")}'`); 
         }
+        else if(layerName === "Joined_Indian_Dhows_Routes"){
+            console.log("date", date)
+            conditions.push(`"date" = '${dayjs(date).format("MM/D/YYYY")}'`);
+        }
         else{
             console.log("date", date)
             conditions.push(`"date" = '${dayjs(date).format("YYYY-MM-DD")}'`);
@@ -128,14 +132,38 @@ function wmsToOpenlayersOptions(options) {
         const endDate = dayjs(ssr_dtg[1].format("YYYY-MM-DD"));
         // conditions.push(`"ssr_dtg" BETWEEN '${dayjs(ssr_dtg[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ")}' AND '${dayjs(ssr_dtg[1]).format("YYYY-MM-DDTHH:mm:ss.SSSZ")}'`);
         conditions.push(`"ssr_dtg" >= '${startDate}' AND "ssr_dtg" <= '${endDate}'`);
- }
+    }
+    // if (begin && begin!==""){
+    //     conditions.push(`"begin" = '${dayjs(begin).format("MM/D/YYYY")}'`);
+    // }    
+    // if (end && end!==""){
+    //     if(layerName === "Joined_Indian_Dhows_Routes"){
+    //         console.log("end", date)
+    //         conditions.push(`"end" = '${dayjs(end).format("MM/D/YYYY")}'`);
+    //     }
+    //     else{
+    //         conditions.push(`"end" = '${dayjs(end).format("YYYY-MM-DD")}'`);
+    //     }
+    // }   
+    if (date_new && date_new!==""){
+        conditions.push(`"begin" >= '${dayjs(date_new[0]).format("MM/D/YYYY")}' AND "end" <= '${dayjs(date_new[1]).format("MM/D/YYYY")}'`); 
+    }    
+    if (date_all_flag_heatmap && date_all_flag_heatmap!==""){ 
+        conditions.push(`"start" >= '${dayjs(date_all_flag_heatmap[0]).format("YYYY-MM-DD")}' AND "end" <= '${dayjs(date_all_flag_heatmap[1]).format("YYYY-MM-DD")}'`);
+        //DATE("start") >= '2023-12-31' AND DATE("end") <= '2024-01-09' 
+    } 
+    // if (start || end2){
+    //     if(start!=="" && end2 !== "")
+    //     conditions.push(`"start" >= '${dayjs(timestamp[0]).format("YYYY-MM-DD")}' AND "end2" <= '${dayjs(timestamp[1]).format("YYYY-MM-DD")}'`); 
+    // } 
+
     console.log("filter condition",conditions)
 
     // const filterValue = conditions.length > 0 ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" ? layerName?.map(name => `${name}: ${conditions.join(" OR ")}`).join(" , ") : `${layerName}: ${conditions.join(" OR ")}` : "";
 
     const filterValue = conditions.length > 0 
   ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" 
-    ? `${layerName?.map(name => `${name}:${conditions.join(" OR ")}`).join(";")}`
+    ? `${layerName?.map(name => `${name}:${conditions.join(" AND ")}`).join(";")}`
     : `${layerName}:${conditions.join(" OR ")}`
   : "";
     if(state?.filter && options?.params)

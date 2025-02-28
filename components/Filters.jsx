@@ -16,63 +16,64 @@ class Filters extends React.Component
       filters: PropTypes.object,
       options: PropTypes.object,
     };
-  constructor(props) {
-    super(props);
-    this.state = {
-      flag: "all",
-      type: "",
-      quantity: "",
-      operator: "=",
-      vessel_name: "",
-      dtg: "",
-      name: "",
-      date: "",
-      ssr_country: "all",
-      ssr_boat_name: "",
-      ssr_own_ship: "",	
-      ssr_no_of_crew: "",
-      ssr_boat_regno: "",
-      layerName: "",
-      vessel_id: "",
-      vessel_ssvid: "",
-      vessel_flag: "all",
-      ssr_dtg: "",
-      ais_type_summary: "",
-      timestamp: "",
-      destination: "",
-      current_port: "",
-    };
-  }
 
-  componentDidMount() {
-    console.log("Filters component mounted");
-    console.log(this)
-    let is_filter = 0; 
-    // console.log(this.is_filter)
-    // Fetch any required initial data or apply stored filters if needed
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState !== this.state) {
-      console.log("previous",prevProps, prevState, "\nFilters component updated:", this.state);
-      this.props.updateFilters(this.state);
+    constructor(props) {
+      super(props);
+      this.state = {
+        flag: "all",
+        type: "",
+        quantity: "",
+        operator: "=",
+        vessel_name: "",
+        dtg: "",
+        name: "",
+        date: "",
+        ssr_country: "all",
+        ssr_boat_name: "",
+        ssr_own_ship: "",	
+        ssr_no_of_crew: "",
+        ssr_boat_regno: "",
+        layerName: "",
+        vessel_id: "",
+        vessel_ssvid: "",
+        vessel_flag: "all",
+        ssr_dtg: "",
+        ais_type_summary: "",
+        timestamp: "",
+        destination: "",
+        current_port: "",
+        begin: "",
+        end: "",
+        start: "",
+        end2: "",
+        date_all_flag_heatmap: "",
+        date_new: "",
+      };
     }
-  }
 
-  componentWillUnmount() {
-    console.log("Filters component will unmount");
-    // Perform cleanup if needed
-  }
+    componentDidMount() {
+      console.log("Filters component mounted");
+      console.log(this)
+      let is_filter = 0; 
+      // console.log(this.is_filter)
+      // Fetch any required initial data or apply stored filters if needed
+    }
 
-  // handleChange = (name, value) => {
-  //   this.setState({ [name]: value }, () => {
-  //     this.props.updateFilters(this.state);
-  //   });
-  // };
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState !== this.state) {
+        console.log("previous",prevProps, prevState, "\nFilters component updated:", this.state);
+        this.props.updateFilters(this.state);
+      }
+    }
 
-  extractLayerName = (id) => {
-    return id ? id.split(".")[0] : "";
-  };
+    componentWillUnmount() {
+      console.log("Filters component will unmount");
+      // Perform cleanup if needed
+    }
+
+    extractLayerName = (id) => {
+      return id ? id.split(".")[0] : "";
+    };
 
   handleChange = (name, value) => {
     console.log("layer filter", name, value, this.props.options.drawingOrder);
@@ -85,7 +86,7 @@ class Filters extends React.Component
     //   updatedLayerName = this.props.options.drawingOrder.slice(1); // Remove the first element
     // }
     if (this.props?.options?.id === "pak_fishing_density_areas.qgz") {
-        updatedLayerName = this.props.options.drawingOrder[2]; // Remove the first element
+        updatedLayerName = this.props.options.drawingOrder[1]; // Remove the first element
     }
     else if (this.props?.options?.id === "indian_dhows_distance_from_pakcoast_final.qgz") {
         updatedLayerName = ['Style_1','Style_2']; // Remove the first element
@@ -134,6 +135,12 @@ class Filters extends React.Component
       timestamp: "",
       destination: "",
       current_port: "",
+      begin: "",
+      end: "",
+      start: "",
+      end2: "",
+      date_all_flag_heatmap: "",
+      date_new: "",
     });
     this.props.clearFilters();
   };
@@ -425,6 +432,14 @@ class Filters extends React.Component
                 {
                 this.props?.options?.id === "pak_fishing_density_areas.qgz" && (
                   <>
+                    {/* Date Range */}
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("date", value)}
+                        value={this.state.date}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
                     {/*Type Dropdown */ }
                     <Form.Item label="Type">
                       <Select
@@ -445,9 +460,6 @@ class Filters extends React.Component
                         onChange={(e) => this.handleChange("name", e.target.value)}
                     />
                     </Form.Item> */}
-                    <Form.Item label="Select Date">
-                      <DatePicker onChange={(value) => this.handleChange("date", value)} format={'DD/MM/YYYY'} value={this.state.date} className="date-picker-custom"/>
-                    </Form.Item>
                     <Form.Item>
                       <Button onClick={this.handleClear} type="default">
                           Clear Filters
@@ -483,6 +495,14 @@ class Filters extends React.Component
                         onChange={(e) => this.handleChange("vessel_ssvid", e.target.value)}
                     />
                     </Form.Item> */}
+                    {/* Date range */}
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("date_all_flag_heatmap", value)}
+                        value={this.state.date_all_flag_heatmap}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
                     {/* Flag/Country Dropdown */}
                     <Form.Item label="Flag">
                       <Select
@@ -510,7 +530,19 @@ class Filters extends React.Component
                 (
                   <>
                     <Form.Item label="Select Date">
-                      <DatePicker onChange={(value) => this.handleChange("date", value)} format={'DD/MM/YYYY'} value={this.state.date} className="date-picker-custom"/>
+                      <RangePicker
+                        onChange={(value) => this.handleChange("date", value)}
+                        value={this.state.date}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
+                    {/* Vessel Name Search */}
+                    <Form.Item label="Search Vessel">
+                    <Input
+                        placeholder="Enter Vessel Name"
+                        value={this.state.name}
+                        onChange={(e) => this.handleChange("name", e.target.value)}
+                    />
                     </Form.Item>
                     <Form.Item>
                       <Button onClick={this.handleClear} type="default">
@@ -518,8 +550,37 @@ class Filters extends React.Component
                       </Button>
                     </Form.Item>
                   </>
-                )}
-
+                )}     
+                {
+                this.props?.options?.id === "indian_dhows_routes.qgz" && (
+                  <>
+                    <Form.Item label="Select Date">
+                      <RangePicker
+                        onChange={(value) => this.handleChange("date_new", value)}
+                        value={this.state.date_new}
+                        format="DD-MM-YYYY" className="date-picker-custom"
+                      />
+                    </Form.Item>
+                    {/* <Form.Item label="Select Begin Date">
+                      <DatePicker onChange={(value) => this.handleChange("begin", value)} 
+                        value={this.state.begin} format={'DD/MM/YYYY'} className="date-picker-custom"/>
+                    </Form.Item>
+                    <Form.Item label="Select End Date">
+                      <DatePicker onChange={(value) => this.handleChange("end", value)} 
+                        value={this.state.end} format={'DD/MM/YYYY'} className="date-picker-custom"/>
+                    </Form.Item>
+                    <Form.Item label="Select Date">
+                      <DatePicker onChange={(value) => this.handleChange("date", value)} 
+                        value={this.state.date} format={'DD/MM/YYYY'} className="date-picker-custom"/>
+                    </Form.Item> */}
+                    <Form.Item>
+                      <Button onClick={this.handleClear} type="default">
+                          Clear Filters
+                      </Button>
+                    </Form.Item>
+                  </>
+                )
+                }
                 
                 {/* reset/clear filters */}
                 {/* { 1 && ( */}
