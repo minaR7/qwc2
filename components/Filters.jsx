@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Select, Input, Button, Form, DatePicker } from "antd";
 import { updateFilters, clearFilters } from "../actions/filters";
-
+import dayjs from "dayjs";
 import PropTypes from 'prop-types';
 import "./style/Filters.css";
 
@@ -40,6 +40,10 @@ class Filters extends React.Component
         ssr_dtg: "",
         ais_type_summary: "",
         timestamp: "",
+        // timestamp: [
+        //   dayjs("2023-03-01").format("YYYY-MM-DD"), 
+        //   dayjs("2023-03-10").format("YYYY-MM-DD")
+        // ],
         destination: "",
         current_port: "",
         begin: "",
@@ -55,6 +59,16 @@ class Filters extends React.Component
       console.log("Filters component mounted");
       console.log(this)
       let is_filter = 0; 
+      const newTimestamp = [
+        dayjs("01-09-2023", "DD-MM-YYYY"),
+        dayjs("15-09-2023", "DD-MM-YYYY")
+      ];
+    
+      this.setState({ timestamp: newTimestamp, layerName: "density" }, () => {
+        this.props.updateFilters({ timestamp: newTimestamp });
+      });
+
+          // this.props.updateFilters(this.state);
       // console.log(this.is_filter)
       // Fetch any required initial data or apply stored filters if needed
     }
@@ -249,7 +263,7 @@ class Filters extends React.Component
                       </Input.Group>
                     </Form.Item>
                     {/* Vessel Name Search */}
-                    <Form.Item label="Search Boat">
+                    {/* <Form.Item label="Search Boat">
                       <Input
                           placeholder="Enter Boat Name"
                           value={this.state.ssr_boat_name}
@@ -269,7 +283,7 @@ class Filters extends React.Component
                           value={this.state.ssr_boat_regno}
                           onChange={(e) => this.handleChange("ssr_boat_regno", e.target.value)}
                       />
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item label="Select Date">
                       <RangePicker
                         onChange={(value) => this.handleChange("ssr_dtg", value)}
@@ -292,6 +306,7 @@ class Filters extends React.Component
                       <RangePicker
                         onChange={(value) => this.handleChange("timestamp", value)}
                         value={this.state.timestamp}
+                        // value={this.state.timestamp.map(date => dayjs(date))}
                         format="DD-MM-YYYY" className="date-picker-custom"
                       />
                     </Form.Item>

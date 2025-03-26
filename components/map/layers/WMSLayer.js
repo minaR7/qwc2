@@ -21,26 +21,6 @@ import MiscUtils from '../../../utils/MiscUtils';
 import {UrlParams} from '../../../utils/PermaLinkUtils';
 import dayjs from 'dayjs';
 
-function periodicWmsImageLoad(image, src, interval = 100000) { // Default interval: 5000ms
-    const loadImage = () => wmsImageLoadFunction(image, src);
-
-    // Initial call to load the image immediately
-    loadImage();
-
-    // Start periodic calls
-    const timerId = setInterval(loadImage, interval);
-
-    // Return the timerId for stopping the periodic calls later
-    return timerId;
-}
-
-function periodicLayerCreation(options, map, interval) {
-    setInterval(() => {
-        const layer = createLayer(options, map);
-        console.log('Layer created periodically:', layer);
-    }, interval);
-}
-
 function wmsImageLoadFunction(image, src) {
     const maxUrlLength = ConfigUtils.getConfigProp("wmsMaxGetUrlLength", null, 2048);
     // console.log(`[${new Date().toLocaleTimeString()}]`,"WMSLayer.js => wmsImageLoadFunction: ", image, src, maxUrlLength )
@@ -164,7 +144,7 @@ function wmsToOpenlayersOptions(options) {
     const filterValue = conditions.length > 0 
   ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" 
     ? `${layerName?.map(name => `${name}:${conditions.join(" AND ")}`).join(";")}`
-    : `${layerName}:${conditions.join(" OR ")}`
+    : `${layerName}:${conditions.join(" AND ")}`
   : "";
     if(state?.filter && options?.params)
     options.params.FILTER = filterValue;
@@ -190,11 +170,10 @@ function wmsToOpenlayersOptions(options) {
 
 export default {
     create: (options, map) => {
-        // const state = store.getState(); // ✅ Get the Redux state
-        // const filterFlag = state.filters.mapFilter; // ✅ Access the map filter
+        // const state = store.getState(); // Get the Redux state
+        // const filterFlag = state.filters.mapFilter; // Access the map filter
         // console.log("filterrr", filterFlag)
         const queryParameters = {...wmsToOpenlayersOptions(options), __t: +new Date()};
-        console.log(queryParameters)
         if (queryParameters.TILED && !options.bbox) {
             /* eslint-disable-next-line */
             console.warn("Tiled WMS requested without specifying bounding box, falling back to non-tiled.");
