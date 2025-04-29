@@ -21,6 +21,7 @@ import MiscUtils from '../../../utils/MiscUtils';
 import {UrlParams} from '../../../utils/PermaLinkUtils';
 import dayjs from 'dayjs';
 
+
 function wmsImageLoadFunction(image, src) {
     const maxUrlLength = ConfigUtils.getConfigProp("wmsMaxGetUrlLength", null, 2048);
     // console.log(`[${new Date().toLocaleTimeString()}]`,"WMSLayer.js => wmsImageLoadFunction: ", image, src, maxUrlLength )
@@ -35,34 +36,31 @@ function wmsImageLoadFunction(image, src) {
             responseType: "blob"
         };
         axios.post(urlParts[0], urlParts[1], options).then(response => {
-            console.log("wmsImageLoadFunction POST req: ", urlParts)
+            // console.log("wmsImageLoadFunction POST req: ", urlParts)
             const reader = new FileReader();
             reader.readAsDataURL(response.data);
             reader.onload = () => {
                 image.src = reader.result;
             };
         }).catch(() => {
-            console.log("Fall back to GET")
+            // console.log("Fall back to GET")
             // Fall back to GET
             image.src = src;
         });
     } else {
-        console.log("Fall back to GET")
+        // Fall back to GET
         image.src = src;
     }
 }
 
 function wmsToOpenlayersOptions(options) {
-    console.log("options", options)
+    // console.log("options", options)
     // Get filter state from Redux store
     const state = StandardStore.get().getState();
-    console.log(state.filter)
-    // const filterValue = `narco: "flag" = ${state.filter.filterParam}`
-    // const filterValue = `narco: "flag" = Irani`
+    // console.log(state.filter)
     const urlParams = Object.entries(url.parse(options.url, true).query).reduce((res, [key, val]) => ({...res, [key.toUpperCase()]: val}), {});
     const urlFilter = UrlParams.getParams()['f'];
     // console.log("new technique for filter:", urlParams, urlFilter)
-
     
     const { layerName, flag, vessel_name, type, quantity, operator, ssr_country, ssr_boat_name, ssr_own_ship, ssr_no_of_crew, ssr_boat_regno, name, date, 
         vessel_id, vessel_ssvid, vessel_flag, dtg, ssr_dtg, ais_type_summary, timestamp, begin, end, start, end2, date_all_flag_heatmap, date_new} = state.filter;
@@ -85,15 +83,15 @@ function wmsToOpenlayersOptions(options) {
     if (date && date!==""){
         if(date.length===2)
         {
-            console.log("date", date.length)
+            // console.log("date", date.length)
             conditions.push(`"date" >= '${dayjs(date[0]).format("YYYY-MM-DD")}' AND "date" <= '${dayjs(date[1]).format("YYYY-MM-DD")}'`); 
         }
         else if(layerName === "Joined_Indian_Dhows_Routes"){
-            console.log("date", date)
+            // console.log("date", date)
             conditions.push(`"date" = '${dayjs(date).format("MM/D/YYYY")}'`);
         }
         else{
-            console.log("date", date)
+            // console.log("date", date)
             conditions.push(`"date" = '${dayjs(date).format("YYYY-MM-DD")}'`);
         }
     }
@@ -170,9 +168,6 @@ function wmsToOpenlayersOptions(options) {
 
 export default {
     create: (options, map) => {
-        // const state = store.getState(); // Get the Redux state
-        // const filterFlag = state.filters.mapFilter; // Access the map filter
-        // console.log("filterrr", filterFlag)
         const queryParameters = {...wmsToOpenlayersOptions(options), __t: +new Date()};
         if (queryParameters.TILED && !options.bbox) {
             /* eslint-disable-next-line */
