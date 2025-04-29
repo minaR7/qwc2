@@ -40,46 +40,31 @@ class OlLayer extends React.Component {
 
     componentDidMount() {
         this.tilestoload = 0;
-        // this.newState = StandardStore.get().getState();
         // Call createLayer initially
         this.createLayer(this.makeOptions(this.props.options));
 
-        console.log(this)
         // Periodically call createLayer every 10 seconds (10000 ms)
-        this.intervalId = setInterval(() => {
-            this.createLayer(this.makeOptions(this.props.options));
-        }, 4000); // Adjust interval as needed
+        // this.intervalId = setInterval(() => {
+        //     this.createLayer(this.makeOptions(this.props.options));
+        // }, 4000); // Adjust interval as needed
 
-        // console.log("StandardStore:", StandardStore);
-        // console.log("Type of StandardStore:", typeof StandardStore);
-        // console.log("Does it have subscribe?:", typeof StandardStore.get().subscribe);
-        // Subscribe to store updates
-        // this.unsubscribe = StandardStore.get().subscribe(() => {
-        //     const newState = StandardStore.get().getState();
-        //     if (newState?.filter && this.hasFilterChanged(newState.filter) )
-        //     {
-        //         this.forceUpdate();
-        //         // this.setState({ prevFilter: newState.filter });
-        //     }
-        // //     if (newState?.filter && this.hasFilterChanged(newState.filter)) {
-        // //         console.log("Filter updated, calling updateLayer");
-        // //         this.updateLayer(this.makeOptions(this.props.options), this.makeOptions(this.props.options));
-        // //         this.setState({ prevFilter: newState.filter }); // Update stored filter state
-        // //     }
-        // });
     }
 
     componentDidUpdate(prevProps) {
-        console.log("UPDATE")
-        console.log(this, "\n",prevProps)
+        console.log("UPDATE",this, "\n",prevProps)
         if (!this.state.layer) {
             return;
         }
-        console.log(prevProps.filters,this.props.filters )
-        if (prevProps.filters !== this.props.filters) {
-            console.log("Filters updated, creating layer...");
-            this.createLayer();
-          }
+        console.log("OlLayer",prevProps.filters,this.props.filters, prevProps.options,this.props.options )
+        const filterChanged = JSON.stringify(prevProps.filters) !== JSON.stringify(this.props.filters);
+        const optionsChanged = prevProps.options !== this.props.options;
+    
+        if (filterChanged || optionsChanged) {
+            console.log("OlLayer","Filters or options changed, recreating layer");
+            this.createLayer(this.makeOptions(this.props.options));
+            return; // Skip other updates since we're recreating the layer
+        }
+
         const newOptions = this.makeOptions(this.props.options);
         const oldOptions = this.makeOptions(prevProps.options);
 
@@ -107,39 +92,18 @@ class OlLayer extends React.Component {
         // if (this.unsubscribe) this.unsubscribe(); // Unsubscribe from store updates
     }
 
-    hasFilterChanged(newFilter) {
-        console.log("Previous filter:", JSON.stringify(this.state.prevFilter));
-        console.log("New filter:", JSON.stringify(newFilter));
-        return JSON.stringify(newFilter) !== JSON.stringify(this.state.prevFilter);
-    }
-
     render() {
         const layerCreator = LayerRegistry[this.props.options.type];
         // console.log("OL Layer Registery", layerCreator)
         if (layerCreator && layerCreator.render) {
-            // console.log("OL Layer Registery", layerCreator)
             return layerCreator.render(this.props.options, this.props.map, this.state.layer);
         }
         return null;
     }
     makeOptions = (options) => {
-        console.log("MAking options", options)
+        // console.log("OlLayer","MAking options", options)
         const projection = options.srs || options.crs || options.projection || this.props.projection;
-        // const filterValue = `narco:flag='Irani'`
-        const newState = StandardStore.get().getState()
-        console.log(newState.filter)
 
-        // const { layerName, flag, vessel_name, type, quantity, operator } = newState.filter;
-        // // const { layerName, flag, vessel_name, type, quantity, operator } = options.params.FILTER
-        // const conditions = [];
-        // if (flag) conditions.push(`"flag" = '${flag}'`);
-        // if (vessel_name) conditions.push(`"vessel_name" = '${vessel_name}'`);
-        // if (type) conditions.push(`"type" = '${type}'`);
-        // if (quantity) conditions.push(`"quantity" ${operator} '${quantity}'`);
-
-        // const filterValue = conditions.length > 0 ? `${layerName}: ${conditions.join(" AND ")}` : "";
-        // if(newState?.filter && options?.params && filterValue)
-        // options.params.FILTER = filterValue;
         return {
             ...options,
             projection: projection,
@@ -150,7 +114,7 @@ class OlLayer extends React.Component {
     };
 
     createLayer = (options) => {
-        console.log("Create Layer")
+        console.log("OlLayer","Create Layer")
         // console.log("options", options);
         let layer = null;
         if (options.type === 'group') {
@@ -182,8 +146,7 @@ class OlLayer extends React.Component {
     };
 
     updateLayer = (newOptions, oldOptions) => {
-        console.log("Update Layer")
-        // console.log("options", newOptions, oldOptions);
+        // console.log("Update Layer")
         if (newOptions === oldOptions) {
             return;
         }
@@ -198,20 +161,6 @@ class OlLayer extends React.Component {
             OlLayerUpdated.notify(this.state.layer);
         }
     };
-
-    // rerenderLayer = (options, filters) => {
-    //     console.log("rerender Layer")
-    //     const layerCreator = LayerRegistry[this.props.options.type];
-    //     if (layerCreator && layerCreator.update) {
-    //         layerCreator.update(
-    //             this.state.layer,
-    //             newOptions,
-    //             oldOptions,
-    //             this.props.map
-    //         );
-    //         OlLayerUpdated.notify(this.state.layer);
-    //     }
-    // }
 
     addLayer = (layer, options) => {
         this.props.map.addLayer(layer);
@@ -297,6 +246,6 @@ class OlLayer extends React.Component {
 }
 
 
-export default connect((state) => ({filters: state.filters}), {
+export default connect(null, {
     setLayerLoading: setLayerLoading
 })(OlLayer);

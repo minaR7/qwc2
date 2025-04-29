@@ -211,9 +211,9 @@ class MapPlugin extends React.Component {
             }
             ++zIndex;
             const swipe = this.props.swipe !== null && layer === this.state.swipeLayer;
-            console.log("renderLayers in Map, OlLayer: ", layer)
+            console.log("renderLayers in Map, OlLayer: ", layer, this.props.filters)
             return (
-                <OlLayer key={layer.uuid} options={layer} swipe={swipe ? this.props.swipe : null} zIndex={layer.zIndex ?? zIndex} />
+                <OlLayer key={layer.uuid} options={layer} swipe={swipe ? this.props.swipe : null} zIndex={layer.zIndex ?? zIndex} filters={this.props.filters} />
             );
         });
     };
@@ -259,6 +259,7 @@ export default (tools) => {
         mapMargins: state.windows.mapMargins,
         swipe: state.layers.swipe,
         theme: state.theme.current,
+        filters: state.filter,
         tools
     }))(MapPlugin);
 };
