@@ -135,15 +135,12 @@ function wmsToOpenlayersOptions(options) {
     //     conditions.push(`"start" >= '${dayjs(timestamp[0]).format("YYYY-MM-DD")}' AND "end2" <= '${dayjs(timestamp[1]).format("YYYY-MM-DD")}'`); 
     // } 
 
-    console.log("filter condition",conditions)
+    // console.log("filter condition",conditions)
 
     // const filterValue = conditions.length > 0 ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" ? layerName?.map(name => `${name}: ${conditions.join(" OR ")}`).join(" , ") : `${layerName}: ${conditions.join(" OR ")}` : "";
 
-    const filterValue = conditions.length > 0 
-  ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" 
-    ? `${layerName?.map(name => `${name}:${conditions.join(" AND ")}`).join(";")}`
-    : `${layerName}:${conditions.join(" AND ")}`
-  : "";
+    const filterValue = conditions.length > 0 ? options?.id === "all_vessels_fishing_density_areas_in_pak.qgz" ? `${layerName?.map(name => `${name}:${conditions.join(" AND ")}`).join(";")}` : `${layerName}:${conditions.join(" AND ")}`: "";
+    // const filterValue = `${layerName}: ${conditions.join(" OR ")}`;
     if(state?.filter && options?.params)
     options.params.FILTER = filterValue;
     console.log("FILTER", options.params.FILTER,"\n",filterValue)

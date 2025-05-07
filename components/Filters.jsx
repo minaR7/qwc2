@@ -56,33 +56,28 @@ class Filters extends React.Component
     }
 
     componentDidMount() {
-      console.log("Filters component mounted");
-      console.log(this)
+      console.log("Filters component mounted", this);
       let is_filter = 0; 
       const newTimestamp = [
         dayjs("01-09-2023", "DD-MM-YYYY"),
         dayjs("15-09-2023", "DD-MM-YYYY")
       ];
     
-      this.setState({ timestamp: newTimestamp, layerName: "density" }, () => {
-        this.props.updateFilters({ timestamp: newTimestamp });
-      });
-
-          // this.props.updateFilters(this.state);
-      // console.log(this.is_filter)
-      // Fetch any required initial data or apply stored filters if needed
+      // this.setState({ timestamp: newTimestamp, layerName: ["eez_density"] }, () => {
+      //   this.props.updateFilters({ timestamp: newTimestamp });
+      // });
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (prevState !== this.state) {
-        console.log("previous",prevProps, prevState, "\nFilters component updated:", this.state);
+        // console.log("previous",prevProps, prevState, "\nFilters component updated:", this.state);
         this.props.updateFilters(this.state);
       }
     }
 
     componentWillUnmount() {
       console.log("Filters component will unmount");
-      // Perform cleanup if needed
+      // Perform cleanup
     }
 
     extractLayerName = (id) => {
@@ -90,7 +85,7 @@ class Filters extends React.Component
     };
 
   handleChange = (name, value) => {
-    console.log("layer filter", name, value, this.props.options.drawingOrder);
+    // console.log("layer filter", name, value, this.props.options.drawingOrder);
   
     // // Check if props.id is 'Patrol'
     let updatedLayerName = this.props.options.drawingOrder;
